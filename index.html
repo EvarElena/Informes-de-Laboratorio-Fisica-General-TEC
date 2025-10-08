@@ -361,19 +361,23 @@
             </section>
         </main>
 
-        <!-- Botones de acción -->
-        <div class="action-buttons">
-            <button id="clearAll" class="btn btn-secondary" title="Desmarcar todas las casillas">
-                <i class="fas fa-eraser" aria-hidden="true"></i>
-                Limpiar Todo
-            </button>
-            <button id="exportProgress" class="btn btn-primary" title="Descargar avance en archivo JSON">
-                <i class="fas fa-download" aria-hidden="true"></i>
-                Exportar Progreso
-            </button>
-        </div>
-    </div>
+      <!-- Botones de acción -->
+<div class="action-buttons">
+  <button id="clearAll" class="btn btn-secondary" title="Desmarcar todas las casillas">
+    <i class="fas fa-eraser" aria-hidden="true"></i>
+    Limpiar Todo
+  </button>
+  <button id="exportProgress" class="btn btn-primary" title="Descargar avance en PDF">
+    <i class="fas fa-download" aria-hidden="true"></i>
+    Exportar Progreso
+  </button>
+</div>
+</div>
 
-    <script src="script.js" defer></script>
+<!-- Cargar jsPDF antes del script principal -->
+<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+
+<!-- Tu script -->
+<script src="script.js" defer></script>
 </body>
 </html>
