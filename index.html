@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Chequeo - Informes de Laboratorio TEC</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header con autoría -->
+        <header class="header">
+            <div class="author-info">
+                <h1>Lista de Chequeo para Informes de Laboratorio</h1>
+                <p class="author">Prof. Évar Sevilla - Escuela de Física TEC</p>
+                <div class="visit-counter">
+                    <i class="fas fa-eye"></i>
+                    <span>Visitas: <span id="visitCount">0</span></span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Botón para consultar guía -->
+        <section class="guide-section">
+            <button id="guideButton" class="guide-btn">
+                <i class="fas fa-book"></i>
+                Consultar Guía para Elaborar Informes
+            </button>
+            <div id="guideModal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                    <h2>Guía para Elaborar Informes</h2>
+                    <p>Para consultar la guía completa, descarga el documento PDF:</p>
+                    <a href="Guía_para_elaborar_informes.pdf" target="_blank" class="download-link">
+                        <i class="fas fa-download"></i>
+                        Descargar Guía (PDF)
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Lista de chequeo principal -->
+        <main class="checklist-container">
+            <h2>Lista de Chequeo por Secciones</h2>
+            
+            <!-- 1. Título -->
+            <section class="checklist-section" data-section="titulo">
+                <div class="section-header">
+                    <h3><i class="fas fa-heading"></i> 1. Título</h3>
+                    <div class="section-progress">
+                        <span class="progress-text">0/4</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="checklist-items">
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="titulo-1">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Representa correctamente el contenido y anticipa el tema principal</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="titulo-2">
+                        <span class="checkmark"></span>
+                        <span class="item-text">No es genérico ni incluye "Informe" o "Laboratorio"</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="titulo-3">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Es el título que le pondrías si lo publicaras en una revista científica</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="titulo-4">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Es claro, conciso y predictivo del contenido</span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- 2. Autoría -->
+            <section class="checklist-section" data-section="autoria">
+                <div class="section-header">
+                    <h3><i class="fas fa-users"></i> 2. Autoría</h3>
+                    <div class="section-progress">
+                        <span class="progress-text">0/3</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="checklist-items">
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="autoria-1">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Se incluyen los nombres completos de todas las personas autoras</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="autoria-2">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Cada nombre tiene dos superíndices: escuela a la que pertenece y correo electrónico institucional</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="autoria-3">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Se mantiene el mismo formato tipográfico para todas las personas autoras</span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- 3. Resumen -->
+            <section class="checklist-section" data-section="resumen">
+                <div class="section-header">
+                    <h3><i class="fas fa-file-alt"></i> 3. Resumen</h3>
+                    <div class="section-progress">
+                        <span class="progress-text">0/6</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="checklist-items">
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="resumen-1">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Se redactó al finalizar el informe (100–250 palabras)</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="resumen-2">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Resume de forma coherente el contenido completo del informe, siguiendo la secuencia lógica: objetivo → método → resultados → conclusiones</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="resumen-3">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Presenta de forma integrada lo que se realizó, los principales resultados obtenidos y los aspectos analizados</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="resumen-4">
+                        <span class="checkmark"></span>
+                        <span class="item-text">No incluye tablas, figuras, ecuaciones, abreviaturas ni citas</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="resumen-5">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Se entiende sin necesidad de leer el resto del documento (debe ser autónomo)</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="resumen-6">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Redactado en pasado y en forma impersonal (por ejemplo: "Se determinó…" en lugar de "Determinamos…")</span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- 4. Palabras clave -->
+            <section class="checklist-section" data-section="palabras-clave">
+                <div class="section-header">
+                    <h3><i class="fas fa-key"></i> 4. Palabras clave</h3>
+                    <div class="section-progress">
+                        <span class="progress-text">0/6</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="checklist-items">
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="palabras-1">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Se incluyen entre tres y seis palabras clave</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="palabras-2">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Ubicadas inmediatamente después del resumen</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="palabras-3">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Caracterizan el contenido del informe: conceptos, variables o fenómenos relevantes</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="palabras-4">
+                        <span class="checkmark"></span>
+                        <span class="item-text">No son términos genéricos (evitar, laboratorio, informe, física general)</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="palabras-5">
+                        <span class="checkmark"></span>
+                        <span class="item-text">No repiten palabras del título salvo que sean indispensables</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="palabras-6">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Se escriben en minúscula, separadas por comas y sin punto final</span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- 5. Introducción -->
+            <section class="checklist-section" data-section="introduccion">
+                <div class="section-header">
+                    <h3><i class="fas fa-lightbulb"></i> 5. Introducción</h3>
+                    <div class="section-progress">
+                        <span class="progress-text">0/8</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="checklist-items">
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="intro-1">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Presenta el marco teórico necesario para comprender el experimento</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="intro-2">
+                        <span class="checkmark"></span>
+                        <span class="item-text">La información proviene de fuentes confiables y todas las citas están correctamente referenciadas según formato APA</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="intro-3">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Contiene todas las ecuaciones teóricas utilizadas en el informe, incluidas las empleadas para cálculos de incertidumbre</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="intro-4">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Cada ecuación está numerada y explicada, indicando para qué se utiliza en el informe</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="intro-5">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Las ecuaciones fueron creadas con el editor de ecuaciones, no insertadas como imágenes</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="intro-6">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Incluye figuras o diagramas solo si aportan claridad conceptual, con numeración de Figura y fuente puede ser creación propia</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="intro-7">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Finaliza con un párrafo en prosa del objetivo general y los objetivos específicos</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="intro-8">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Se redacta en tiempo verbal presente y de forma impersonal</span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- 6. Materiales y métodos -->
+            <section class="checklist-section" data-section="materiales-metodos">
+                <div class="section-header">
+                    <h3><i class="fas fa-cogs"></i> 6. Materiales y métodos</h3>
+                    <div class="section-progress">
+                        <span class="progress-text">0/8</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="checklist-items">
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="metodos-1">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Describe cómo se realizó el experimento en orden lógico y cronológico</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="metodos-2">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Redactada en prosa continua, no como lista de pasos</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="metodos-3">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Incluye equipos, instrumentos y materiales, con marca y modelo si están disponibles</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="metodos-4">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Indica qué variables se midieron y qué procedimiento se siguió</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="metodos-5">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Explica cómo se registraron las mediciones y condiciones relevantes si influyen en los resultados</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="metodos-6">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Permite que otra persona profesional pueda repetir el experimento y validar los resultados</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="metodos-7">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Si se aplicaron ecuaciones o procedimientos de cálculo intermedio, se mencionan con referencia a su número en la introducción</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="metodos-8">
+                        <span class="checkmark"></span>
+                        <span class="item-text">No se incluyen resultados, conclusiones ni interpretaciones</span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- 7. Resultados -->
+            <section class="checklist-section" data-section="resultados">
+                <div class="section-header">
+                    <h3><i class="fas fa-chart-line"></i> 7. Resultados</h3>
+                    <div class="section-progress">
+                        <span class="progress-text">0/11</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="checklist-items">
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="resultados-1">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Se presentan solo los resultados procesados, cada conjunto precedido por texto explicativo</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="resultados-2">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Si los resultados se obtuvieron mediante ecuaciones, se menciona el número de la ecuación teórica correspondiente</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="resultados-3">
+                        <span class="checkmark"></span>
+                        <span class="item-text">No se interpretan los resultados ni se comparan con la teoría (eso pertenece a la Discusión)</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="resultados-4">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Incluye incertidumbre y porcentajes de error cuando corresponde</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="resultados-5">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Se redacta en tiempo verbal pasado y de forma impersonal</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="resultados-6">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Tablas: Fueron creadas directamente en el documento, no pegadas como imágenes</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="resultados-7">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Tablas: Cada tabla tiene un número y título descriptivo colocado arriba de la misma</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="resultados-8">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Tablas: Se utilizan encabezados claros con unidades cuando corresponde</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="resultados-9">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Tablas: Se emplea el número adecuado de cifras significativas</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="resultados-10">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Gráficas: Cada gráfica tiene títulos de ejes con unidades correctas</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="resultados-11">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Gráficas: Incluye línea de tendencia y ecuación empírica con variables correctas</span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- 8. Discusión -->
+            <section class="checklist-section" data-section="discusion">
+                <div class="section-header">
+                    <h3><i class="fas fa-brain"></i> 8. Discusión</h3>
+                    <div class="section-progress">
+                        <span class="progress-text">0/7</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="checklist-items">
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="discusion-1">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Analiza los resultados en relación con los objetivos planteados</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="discusion-2">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Compara los resultados experimentales con las predicciones teóricas o modelos estudiados</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="discusion-3">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Explica si los resultados confirman, apoyan o difieren del comportamiento esperado</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="discusion-4">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Cuando hay concordancia, se explica por qué el modelo teórico describe adecuadamente el fenómeno</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="discusion-5">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Si los resultados difieren, se discuten posibles razones físicas o experimentales</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="discusion-6">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Identifica las principales causas de error que pudieron influir en las mediciones</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="discusion-7">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Cuando se supone que un factor afectó los resultados pero no se comprobó, se aclara que es una posible influencia o hipótesis, no un resultado verificado</span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- 9. Conclusiones -->
+            <section class="checklist-section" data-section="conclusiones">
+                <div class="section-header">
+                    <h3><i class="fas fa-flag-checkered"></i> 9. Conclusiones</h3>
+                    <div class="section-progress">
+                        <span class="progress-text">0/7</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="checklist-items">
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="conclusiones-1">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Reflejan si se cumplieron o no los objetivos del experimento</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="conclusiones-2">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Están fundamentadas en los resultados analizados y discutidos, es decir se concluye algo que ha sido</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="conclusiones-3">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Redactadas en prosa continua, no como lista</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="conclusiones-4">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Cada conclusión expresa una idea completa relacionada con un objetivo</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="conclusiones-5">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Incluyen datos numéricos concretos cuando aportan evidencia</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="conclusiones-6">
+                        <span class="checkmark"></span>
+                        <span class="item-text">No introducen información nueva ni resultados no discutidos</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="conclusiones-7">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Mantienen coherencia con objetivos y resultados</span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- 10. Referencias -->
+            <section class="checklist-section" data-section="referencias">
+                <div class="section-header">
+                    <h3><i class="fas fa-bookmark"></i> 10. Referencias</h3>
+                    <div class="section-progress">
+                        <span class="progress-text">0/6</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="checklist-items">
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="referencias-1">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Incluye todas las fuentes citadas dentro del texto del informe</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="referencias-2">
+                        <span class="checkmark"></span>
+                        <span class="item-text">No se incluyen fuentes que no hayan sido citadas</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="referencias-3">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Utiliza el formato APA (6ª o 7ª edición), Vancouver, MLM, IEEE u otros de manera correcta</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="referencias-4">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Las referencias aparecen en orden alfabético por apellido de la primera persona autora</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="referencias-5">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Si se citaron ecuaciones, imágenes o figuras adaptadas, se incluye la fuente correspondiente</span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- 11. Presentación y estilo general -->
+            <section class="checklist-section" data-section="presentacion">
+                <div class="section-header">
+                    <h3><i class="fas fa-paint-brush"></i> 11. Presentación y estilo general</h3>
+                    <div class="section-progress">
+                        <span class="progress-text">0/3</span>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="checklist-items">
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="presentacion-1">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Coherencia entre secciones; ortografía y gramática correctas</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="presentacion-2">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Lenguaje técnico adecuado y preciso; evitar mayúsculas innecesarias y palabras comodín</span>
+                    </label>
+                    <label class="checklist-item">
+                        <input type="checkbox" data-item="presentacion-3">
+                        <span class="checkmark"></span>
+                        <span class="item-text">Redacción impersonal o en tercera persona en todo el documento</span>
+                    </label>
+                </div>
+            </section>
+
+            <!-- Resumen general -->
+            <section class="overall-progress">
+                <h3>Progreso General</h3>
+                <div class="overall-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalCompleted">0</span>
+                        <span class="stat-label">Elementos completados</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalItems">68</span>
+                        <span class="stat-label">Total de elementos</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="completionPercentage">0%</span>
+                        <span class="stat-label">Porcentaje completado</span>
+                    </div>
+                </div>
+                <div class="overall-progress-bar">
+                    <div class="overall-progress-fill" id="overallProgressFill" style="width: 0%"></div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Botones de acción -->
+        <div class="action-buttons">
+            <button id="clearAll" class="btn btn-secondary">
+                <i class="fas fa-eraser"></i>
+                Limpiar Todo
+            </button>
+            <button id="exportProgress" class="btn btn-primary">
+                <i class="fas fa-download"></i>
+                Exportar Progreso
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
