@@ -595,3 +595,111 @@ notificationStyles.textContent = `
     }
 `;
 document.head.appendChild(notificationStyles);
+// ===== Exportar Progreso a PDF con jsPDF =====
+(function () {
+  const btn = document.getElementById('exportProgress');
+  if (!btn) return;
+
+  // Evita handlers duplicados si ya existía alguno
+  btn.replaceWith(btn.cloneNode(true));
+  const freshBtn = document.getElementById('exportProgress');
+  freshBtn.addEventListener('click', exportProgressToPDF);
+
+  function exportProgressToPDF() {
+    if (!window.jspdf || !window.jspdf.jsPDF) {
+      alert('No se cargó jsPDF. Verifique la etiqueta <script> del CDN.');
+      return;
+    }
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'pt', format: 'letter' }); // Carta (8.5x11in)
+
+    // --- Recolección de datos del DOM ---
+    const sections = Array.from(document.querySelectorAll('.checklist-section'));
+    const totalItems = sections.reduce((acc, sec) => {
+      return acc + sec.querySelectorAll('.checklist-item input[type="checkbox"]').length;
+    }, 0);
+
+    const totalCompleted = sections.reduce((acc, sec) => {
+      return acc + sec.querySelectorAll('.checklist-item input[type="checkbox"]:checked').length;
+    }, 0);
+
+    const percentage = totalItems > 0 ? Math.round((totalCompleted / totalItems) * 100) : 0;
+
+    // Fecha/hora local CR
+    const now = new Date();
+    const fecha = now.toLocaleString('es-CR', { hour12: false });
+
+    // --- Encabezado ---
+    let y = 48;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(14);
+    doc.text('Lista de Chequeo - Informes de Laboratorio (TEC)', 40, y);
+    y += 22;
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.text(`Fecha: ${fecha}`, 40, y); y += 14;
+    doc.text(`Progreso: ${totalCompleted}/${totalItems} (${percentage}%)`, 40, y); y += 22;
+
+    // --- Resumen por sección ---
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(12);
+    doc.text('Resumen por sección', 40, y); y += 16;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+
+    sections.forEach((section, idx) => {
+      const title = section.querySelector('.section-header h3')?.innerText?.trim() || `Sección ${idx + 1}`;
+      const checks = Array.from(section.querySelectorAll('.checklist-item input[type="checkbox"]'));
+      const done = checks.filter(ch => ch.checked).length;
+      const total = checks.length;
+
+      const line = `• ${title}: ${done}/${total}`;
+      const split = doc.splitTextToSize(line, 520);
+
+      if (y + split.length * 12 > 760) { doc.addPage(); y = 48; }
+      doc.text(split, 40, y);
+      y += split.length * 12 + 6;
+    });
+
+    // --- (Opcional) Listado de ítems marcados ---
+    // Descomente si desea incluir cada ítem marcado.
+    /*
+    doc.addPage();
+    y = 48;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(12);
+    doc.text('Ítems marcados', 40, y); y += 16;
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+
+    sections.forEach((section, idx) => {
+      const title = section.querySelector('.section-header h3')?.innerText?.trim() || `Sección ${idx + 1}`;
+      const marked = Array.from(section.querySelectorAll('.checklist-item'))
+        .filter(el => el.querySelector('input[type="checkbox"]').checked)
+        .map(el => el.querySelector('.item-text')?.innerText?.trim())
+        .filter(Boolean);
+
+      if (marked.length === 0) return;
+
+      const header = `${title}`;
+      const headerSplit = doc.splitTextToSize(header, 520);
+      if (y + headerSplit.length * 14 > 760) { doc.addPage(); y = 48; }
+      doc.setFont('helvetica', 'bold');
+      doc.text(headerSplit, 40, y); y += headerSplit.length * 14 + 6;
+
+      doc.setFont('helvetica', 'normal');
+      marked.forEach(txt => {
+        const bullets = doc.splitTextToSize(`- ${txt}`, 520);
+        if (y + bullets.length * 12 > 760) { doc.addPage(); y = 48; }
+        doc.text(bullets, 54, y); y += bullets.length * 12 + 4;
+      });
+      y += 8;
+    });
+    */
+
+    // --- Guardar PDF ---
+    doc.save('Progreso_Lista_Chequeo_TEC.pdf');
+  }
+})();
