@@ -24,53 +24,33 @@ async function initializeVisitCounter() {
   const el = document.getElementById('visitCount');
   if (!el) return;
 
-  // Usa un namespace y key estables y ASCII (evita tildes reales)
+  // Namespace y key usados también en el JSONP del index.html
   const NAMESPACE = 'evarelena.github.io';
-  const KEY = 'Informes-de-Laboratorio-Fisica-General-TEC'; // coincide con tu slug público
+  const KEY = 'Informes-de-Laboratorio-Fisica-General-TEC';
 
-  const base = 'https://api.countapi.xyz';
-  const urlCreate = `${base}/create?namespace=${encodeURIComponent(NAMESPACE)}&key=${encodeURIComponent(KEY)}&value=0`;
-  const urlHit    = `${base}/hit/${encodeURIComponent(NAMESPACE)}/${encodeURIComponent(KEY)}`;
-  const urlGet    = `${base}/get/${encodeURIComponent(NAMESPACE)}/${encodeURIComponent(KEY)}`;
-
-  // Helper con logs
-  async function safeFetch(url, desc) {
-    try {
-      const r = await fetch(url, { cache: 'no-store' });
-      console.log('[CountAPI]', desc, r.status, url);
-      if (!r.ok) throw new Error(`${desc} status ${r.status}`);
-      const data = await r.json();
-      console.log('[CountAPI] data', data);
-      return data;
-    } catch (e) {
-      console.error('[CountAPI] error in', desc, e);
-      throw e;
-    }
-  }
+  // URL para lectura sin incrementar (solo obtener valor)
+  const urlGet = `https://api.countapi.xyz/get/${encodeURIComponent(NAMESPACE)}/${encodeURIComponent(KEY)}`;
 
   try {
-    // 1) Crea si no existe (idempotente)
-    await safeFetch(urlCreate, 'create');
+    // Lee el contador actual (el JSONP ya hizo el "hit")
+    const r = await fetch(urlGet, { cache: 'no-store' });
+    if (!r.ok) throw new Error('CountAPI get failed');
+    const data = await r.json();
+    const total = data.value ?? data.count ?? 0;
 
-    // 2) Incrementa y muestra
-    const hit = await safeFetch(urlHit, 'hit');
-    const total = (hit.value ?? hit.count ?? 0);
-    visitCount = total;                 // <-- actualiza variable global
-    el.textContent = String(total);
+    // Si el JSONP todavía no lo actualizó, úsalo como respaldo
+    if (!window.visitCount) {
+      window.visitCount = total;
+      el.textContent = String(total);
+    }
   } catch {
-    // 3) Si falló el hit, al menos intenta leer
-    try {
-      const get = await safeFetch(urlGet, 'get');
-      const total2 = (get.value ?? get.count ?? 0);
-      visitCount = total2;              // <-- actualiza variable global
-      el.textContent = String(total2);
-    } catch {
-      // 4) Fallback: contador local por si CountAPI no responde
-      const stored = localStorage.getItem('visitCount');
-      let local = stored ? parseInt(stored, 10) : 0;
-      local++;
-      localStorage.setItem('visitCount', String(local));
-      visitCount = local;               // <-- actualiza variable global
+    // Fallback local (solo si CountAPI falla completamente)
+    const stored = localStorage.getItem('visitCount');
+    let local = stored ? parseInt(stored, 10) : 0;
+    local++;
+    localStorage.setItem('visitCount', String(local));
+    if (!window.visitCount) {
+      window.visitCount = local;
       el.textContent = String(local);
     }
   }
