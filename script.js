@@ -26,7 +26,7 @@ async function initializeVisitCounter() {
 
   // Usa un namespace y key estables y ASCII (evita tildes reales)
   const NAMESPACE = 'evarelena.github.io';
-  const KEY = 'Informes-de-Laboratorio-F-sica-General-TEC'; // coincide con tu slug público
+  const KEY = 'Informes-de-Laboratorio-Fisica-General-TEC'; // coincide con tu slug público
 
   const base = 'https://api.countapi.xyz';
   const urlCreate = `${base}/create?namespace=${encodeURIComponent(NAMESPACE)}&key=${encodeURIComponent(KEY)}&value=0`;
