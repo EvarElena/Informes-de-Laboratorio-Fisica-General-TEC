@@ -1,11 +1,21 @@
 // =========================
 //  Lista de Chequeo - TEC
-//  script.js (versión PDF)
+//  script.js (versión PDF + Contador global)
 // =========================
 
 // Variables globales
 let visitCount = 0;
 let checklistData = {};
+
+// -----------------------
+// Inicialización al cargar la página
+// -----------------------
+document.addEventListener('DOMContentLoaded', function () {
+  initializeVisitCounter();   // contador global (CountAPI)
+  initializeChecklist();
+  initializeModal();
+  initializeActionButtons();
+});
 
 // -----------------------
 // Contador de visitas global (CountAPI) con create + fallback
@@ -45,19 +55,22 @@ async function initializeVisitCounter() {
     // 2) Incrementa y muestra
     const hit = await safeFetch(urlHit, 'hit');
     const total = (hit.value ?? hit.count ?? 0);
+    visitCount = total;                 // <-- actualiza variable global
     el.textContent = String(total);
   } catch {
     // 3) Si falló el hit, al menos intenta leer
     try {
       const get = await safeFetch(urlGet, 'get');
       const total2 = (get.value ?? get.count ?? 0);
+      visitCount = total2;              // <-- actualiza variable global
       el.textContent = String(total2);
     } catch {
-      // 4) Fallback local por si la red bloquea CountAPI
+      // 4) Fallback: contador local por si CountAPI no responde
       const stored = localStorage.getItem('visitCount');
       let local = stored ? parseInt(stored, 10) : 0;
       local++;
       localStorage.setItem('visitCount', String(local));
+      visitCount = local;               // <-- actualiza variable global
       el.textContent = String(local);
     }
   }
@@ -98,7 +111,7 @@ function updateSectionProgress(checkbox) {
   const checkboxes = section.querySelectorAll('input[type="checkbox"]');
   const checkedBoxes = section.querySelectorAll('input[type="checkbox"]:checked');
 
-  const total = checkboxes.length || 1; // evite división por 0
+  const total = checkboxes.length || 1; // evita división por 0
   const completed = checkedBoxes.length;
   const percentage = (completed / total) * 100;
 
@@ -260,7 +273,7 @@ function exportProgressToPDF() {
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(10);
   doc.text(`Fecha: ${fecha}`, 40, y); y += 14;
-  doc.text(`Visitas (equipo local): ${visitCount}`, 40, y); y += 14;
+  doc.text(`Visitas (global): ${visitCount}`, 40, y); y += 14;
   doc.text(`Progreso: ${totalCompleted}/${totalItems} (${percentage}%)`, 40, y); y += 22;
 
   // --- Resumen por sección ---
