@@ -1,69 +1,30 @@
-+13
--2
-
 // =========================
 //  Lista de Chequeo - TEC
-//  script.js (versión PDF + Contador global)
+//  script.js (versión PDF)
 // =========================
 
 // Variables globales
 let visitCount = 0;
-var visitCount = 0;
 let checklistData = {};
 
-// -----------------------
-// Inicialización al cargar la página
-// -----------------------
+// Inicialización cuando se carga la página
 document.addEventListener('DOMContentLoaded', function () {
-  initializeVisitCounter();   // contador global (CountAPI)
+  initializeVisitCounter();
   initializeChecklist();
   initializeModal();
   initializeActionButtons();
 });
 
 // -----------------------
-// Contador de visitas global (CountAPI) con create + fallback
+// Contador de visitas
 // -----------------------
-async function initializeVisitCounter() {
-  const el = document.getElementById('visitCount');
-  if (!el) return;
-
-  // Namespace y key usados también en el JSONP del index.html
-  const NAMESPACE = 'evarelena.github.io';
-  const KEY = 'Informes-de-Laboratorio-Fisica-General-TEC';
-
-  // URL para lectura sin incrementar (solo obtener valor)
-  const urlGet = `https://api.countapi.xyz/get/${encodeURIComponent(NAMESPACE)}/${encodeURIComponent(KEY)}`;
-
-  try {
-    // Lee el contador actual (el JSONP ya hizo el "hit")
-    const r = await fetch(urlGet, { cache: 'no-store' });
-    if (!r.ok) throw new Error('CountAPI get failed');
-    const data = await r.json();
-    const total = data.value ?? data.count ?? 0;
-
-    // Si el JSONP todavía no lo actualizó, úsalo como respaldo
-    if (!window.visitCount) {
-      visitCount = total;
-      window.visitCount = total;
-      el.textContent = String(total);
-    } else {
-      visitCount = window.visitCount;
-    }
-  } catch {
-    // Fallback local (solo si CountAPI falla completamente)
-    const stored = localStorage.getItem('visitCount');
-    let local = stored ? parseInt(stored, 10) : 0;
-    local++;
-    localStorage.setItem('visitCount', String(local));
-    if (!window.visitCount) {
-      visitCount = local;
-      window.visitCount = local;
-      el.textContent = String(local);
-    } else {
-      visitCount = window.visitCount;
-    }
-  }
+function initializeVisitCounter() {
+  const storedCount = localStorage.getItem('visitCount');
+  visitCount = storedCount ? parseInt(storedCount, 10) : 0;
+  visitCount++;
+  localStorage.setItem('visitCount', visitCount.toString());
+  const vc = document.getElementById('visitCount');
+  if (vc) vc.textContent = visitCount;
 }
 
 // -----------------------
@@ -87,6 +48,9 @@ function initializeChecklist() {
     const cbs = section.querySelectorAll('input[type="checkbox"]');
     if (cbs.length > 0) updateSectionProgress(cbs[0]);
   });
+  updateOverallProgress();
+}
+
 // ---------------------------------
 // Actualizar progreso de sección
 // ---------------------------------
@@ -98,7 +62,7 @@ function updateSectionProgress(checkbox) {
   const checkboxes = section.querySelectorAll('input[type="checkbox"]');
   const checkedBoxes = section.querySelectorAll('input[type="checkbox"]:checked');
 
-  const total = checkboxes.length || 1; // evita división por 0
+  const total = checkboxes.length || 1; // evite división por 0
   const completed = checkedBoxes.length;
   const percentage = (completed / total) * 100;
 
@@ -260,7 +224,7 @@ function exportProgressToPDF() {
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(10);
   doc.text(`Fecha: ${fecha}`, 40, y); y += 14;
-  doc.text(`Visitas (global): ${visitCount}`, 40, y); y += 14;
+  doc.text(`Visitas (equipo local): ${visitCount}`, 40, y); y += 14;
   doc.text(`Progreso: ${totalCompleted}/${totalItems} (${percentage}%)`, 40, y); y += 22;
 
   // --- Resumen por sección ---
@@ -431,7 +395,14 @@ function showNotification(message, type = 'info') {
   n.innerHTML = `
     <div class="notification-content">
       <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i>
-       z-index: 10000; transform: translateX(100%); transition: transform .3s ease; max-width: 300px;
+      <span>${message}</span>
+    </div>
+  `;
+  n.style.cssText = `
+    position: fixed; top: 20px; right: 20px;
+    background: ${type === 'success' ? 'linear-gradient(135deg, #48bb78, #38a169)' : 'linear-gradient(135deg, #667eea, #764ba2)'};
+    color: white; padding: 15px 20px; border-radius: 10px; box-shadow: 0 8px 25px rgba(0,0,0,.2);
+    z-index: 10000; transform: translateX(100%); transition: transform .3s ease; max-width: 300px;
   `;
   document.body.appendChild(n);
   setTimeout(() => (n.style.transform = 'translateX(0)'), 100);
@@ -457,12 +428,6 @@ function animateNumber(element, start, end, duration) {
 window.addEventListener('load', function () {
   const visitCountElement = document.getElementById('visitCount');
   if (visitCountElement) animateNumber(visitCountElement, 0, visitCount, 800);
-  if (visitCountElement) {
-    const startValue = parseInt(visitCountElement.textContent || '0', 10);
-    const targetValue = typeof window.visitCount === 'number' ? window.visitCount : visitCount;
-    animateNumber(visitCountElement, startValue, targetValue, 800);
-    visitCount = targetValue;
-  }
 
   setTimeout(() => {
     const totalCompleted = document.getElementById('totalCompleted');
@@ -481,13 +446,6 @@ notificationStyles.textContent = `
   .congratulations-content{display:flex;align-items:center;gap:15px}
   .congratulations-icon{font-size:2.5rem;animation:bounce .6s ease-in-out;flex-shrink:0}
   .congratulations-text h3{margin:0 0 8px 0;font-size:1.3rem;font-weight:700}
-  .congratulations-text p{margin:0;font-size:1rem;opacity:.9;line-height:1.3}
-  .final-congratulations-content{display:flex;flex-direction:column;align-items:center;gap:20px}
-  .final-congratulations-icon{font-size:4rem;animation:bounce .8s ease-in-out infinite}
-  .final-congratulations-text h2{margin:0 0 15px 0;font-size:2.5rem;font-weight:800;text-shadow:2px 2px 4px rgba(0,0,0,.3)}
-  .final-congratulations-text p{margin:0 0 10px 0;font-size:1.3rem;opacity:.95}
-  .final-subtitle{font-size:1.1rem!important;opacity:.8!important;font-style:italic}
-  @keyframes bounce{0%,20%,50%,80%,100%{transform:translateY(0)}40%{transform:translateY(-10px)}60%{transform:translateY(-5px)}}
   .congratulations-text p{margin:0;font-size:1rem;opacity:.9;line-height:1.3}
   .final-congratulations-content{display:flex;flex-direction:column;align-items:center;gap:20px}
   .final-congratulations-icon{font-size:4rem;animation:bounce .8s ease-in-out infinite}
