@@ -9,23 +9,52 @@ let checklistData = {};
 
 // Inicialización cuando se carga la página
 document.addEventListener('DOMContentLoaded', function () {
-  initializeVisitCounter();
+  initializeVisitCounter();  // contador global (CountAPI)
   initializeChecklist();
   initializeModal();
   initializeActionButtons();
 });
 
 // -----------------------
-// Contador de visitas
+// Contador de visitas global (CountAPI) con fallback local
 // -----------------------
-function initializeVisitCounter() {
-  const storedCount = localStorage.getItem('visitCount');
-  visitCount = storedCount ? parseInt(storedCount, 10) : 0;
-  visitCount++;
-  localStorage.setItem('visitCount', visitCount.toString());
-  const vc = document.getElementById('visitCount');
-  if (vc) vc.textContent = visitCount;
+async function initializeVisitCounter() {
+  const el = document.getElementById('visitCount');
+  if (!el) return;
+
+  // Define un namespace y key únicos para tu proyecto
+  const NAMESPACE = 'evarelena.github.io'; // dominio base de tu GitHub Pages
+  const KEY = 'Informes-de-Laboratorio-Fisica-General'; // nombre único del contador
+
+  // URLs de la API
+  const urlHit = `https://api.countapi.xyz/hit/${encodeURIComponent(NAMESPACE)}/${encodeURIComponent(KEY)}`;
+  const urlGet = `https://api.countapi.xyz/get/${encodeURIComponent(NAMESPACE)}/${encodeURIComponent(KEY)}`;
+
+  try {
+    // Incrementa y obtiene el total global
+    const res = await fetch(urlHit, { cache: 'no-store' });
+    if (!res.ok) throw new Error('CountAPI hit failed');
+    const data = await res.json();
+    const total = data.value ?? data.count ?? 0;
+    el.textContent = total.toString();
+  } catch (e) {
+    // Si hay error, intenta leer el valor sin incrementar
+    try {
+      const res2 = await fetch(urlGet, { cache: 'no-store' });
+      const data2 = await res2.json();
+      const total2 = data2.value ?? data2.count ?? 0;
+      el.textContent = total2.toString();
+    } catch {
+      // Fallback: contador local por si CountAPI no responde
+      const storedCount = localStorage.getItem('visitCount');
+      let local = storedCount ? parseInt(storedCount, 10) : 0;
+      local++;
+      localStorage.setItem('visitCount', local.toString());
+      el.textContent = local.toString();
+    }
+  }
 }
+
 
 // -----------------------
 // Inicializar checklist
