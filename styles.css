@@ -457,3 +457,33 @@ body {
         padding: 20px;
     }
 }
+/* Footer (licencia Creative Commons) */
+footer {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #2d3748;
+    margin-top: 40px;
+    padding: 15px 10px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 20px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(8px);
+}
+
+footer a {
+    color: #005f73;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+footer img {
+    vertical-align: middle;
+    margin-left: 0.2em;
+    max-width: 1em;
+    max-height: 1em;
+    opacity: 0.85;
+}
