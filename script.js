@@ -1,3 +1,6 @@
++13
+-2
+
 // =========================
 //  Lista de Chequeo - TEC
 //  script.js (versión PDF + Contador global)
@@ -5,6 +8,7 @@
 
 // Variables globales
 let visitCount = 0;
+var visitCount = 0;
 let checklistData = {};
 
 // -----------------------
@@ -40,8 +44,11 @@ async function initializeVisitCounter() {
 
     // Si el JSONP todavía no lo actualizó, úsalo como respaldo
     if (!window.visitCount) {
+      visitCount = total;
       window.visitCount = total;
       el.textContent = String(total);
+    } else {
+      visitCount = window.visitCount;
     }
   } catch {
     // Fallback local (solo si CountAPI falla completamente)
@@ -50,8 +57,11 @@ async function initializeVisitCounter() {
     local++;
     localStorage.setItem('visitCount', String(local));
     if (!window.visitCount) {
+      visitCount = local;
       window.visitCount = local;
       el.textContent = String(local);
+    } else {
+      visitCount = window.visitCount;
     }
   }
 }
@@ -77,9 +87,6 @@ function initializeChecklist() {
     const cbs = section.querySelectorAll('input[type="checkbox"]');
     if (cbs.length > 0) updateSectionProgress(cbs[0]);
   });
-  updateOverallProgress();
-}
-
 // ---------------------------------
 // Actualizar progreso de sección
 // ---------------------------------
