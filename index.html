@@ -353,7 +353,7 @@
                         <span class="stat-number" id="totalItems">74</span>
                         <span class="stat-label">Total de elementos</span>
                     </div>
-                    <div class="stat-item">
+                   <div class="stat-item">
                         <span class="stat-number" id="completionPercentage">0%</span>
                         <span class="stat-label">Porcentaje completado</span>
                     </div>
@@ -378,12 +378,14 @@
 <!-- Cargar jsPDF antes del script principal -->
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 <script>
+  window.visitCount = window.visitCount || 0;
   // Callback JSONP de CountAPI: actualiza el número en pantalla y la variable global
   function countApiCallback(res) {
     var total = (res && (res.value ?? res.count)) || 0;
     var el = document.getElementById('visitCount');
     if (el) el.textContent = String(total);
     window.visitCount = total;
+    visitCount = total;
   }
 </script>
 <script async src="https://api.countapi.xyz/hit/evarelena.github.io/Informes-de-Laboratorio-Fisica-General-TEC?callback=countApiCallback"></script>
