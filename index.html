@@ -1,3 +1,9 @@
+‎index.html‎
++10
+-9
+Lines changed: 10 additions & 9 deletions
+Original file line number	Diff line number	Diff line change
+@@ -1,383 +1,384 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -13,7 +19,7 @@
         <!-- Encabezado -->
         <header class="header">
             <div class="author-info">
-                <h1>Lista de Chequeo para Informes de Laboratorio de Física TEC</h1>
+                <h1>Lista de Chequeo para Informes de Laboratorio</h1>
                 <p class="author">Prof. Évar Elena Sevilla Quesada· Escuela de Física · TEC</p>
                 <div class="visit-counter" aria-label="Contador de visitas">
                     <i class="fas fa-eye" aria-hidden="true"></i>
@@ -224,6 +230,15 @@
                     </div>
                 </div>
                 <div class="checklist-items">
+                    <label class="checklist-item"><input type="checkbox" data-item="metodos-1"><span class="checkmark"></span><span class="item-text">Describe cómo se realizó el experimento en orden lógico y cronológico</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="metodos-2"><span class="checkmark"></span><span class="item-text">Redactada en prosa continua, no como lista de pasos</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="metodos-3"><span class="checkmark"></span><span class="item-text">Incluye equipos, instrumentos y materiales; con marca y modelo si están disponibles</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="metodos-4"><span class="checkmark"></span><span class="item-text">Indica qué variables se midieron y qué procedimiento se siguió</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="metodos-5"><span class="checkmark"></span><span class="item-text">Explica cómo se registraron las mediciones y condiciones relevantes</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="metodos-6"><span class="checkmark"></span><span class="item-text">Permite que otra persona profesional repita el experimento y valide resultados</span></label
+                    <label class="checklist-item"><input type="checkbox" data-item="metodos-8"><span class="checkmark"></span><span class="item-text">No se incluyen resultados, conclusiones ni interpretaciones</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="metodos-9"><span class="checkmark"></span><span class="item-text">Se redacta en tiempo pasado y de forma impersonal</span></label>
+                </div>
   <label class="checklist-item"><input type="checkbox" data-item="metodos-1"><span class="checkmark"></span><span class="item-text">Describe cómo se realizó el experimento en orden lógico y cronológico</span></label>
   <label class="checklist-item"><input type="checkbox" data-item="metodos-2"><span class="checkmark"></span><span class="item-text">Redactada en prosa continua, no como lista de pasos</span></label>
   <label class="checklist-item"><input type="checkbox" data-item="metodos-3"><span class="checkmark"></span><span class="item-text">Incluye equipos, instrumentos y materiales; con marca y modelo si están disponibles</span></label>
@@ -233,7 +248,6 @@
   <label class="checklist-item"><input type="checkbox" data-item="metodos-8"><span class="checkmark"></span><span class="item-text">No se incluyen resultados, conclusiones ni interpretaciones</span></label>
   <label class="checklist-item"><input type="checkbox" data-item="metodos-9"><span class="checkmark"></span><span class="item-text">Se redacta en tiempo pasado y de forma impersonal</span></label>
 </div>
-
             </section>
 
             <!-- 7. Resultados (13) -->
@@ -353,7 +367,7 @@
                         <span class="stat-number" id="totalItems">74</span>
                         <span class="stat-label">Total de elementos</span>
                     </div>
-                   <div class="stat-item">
+                    <div class="stat-item">
                         <span class="stat-number" id="completionPercentage">0%</span>
                         <span class="stat-label">Porcentaje completado</span>
                     </div>
@@ -377,20 +391,13 @@
 
 <!-- Cargar jsPDF antes del script principal -->
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-<script>
-  window.visitCount = window.visitCount || 0;
-  // Callback JSONP de CountAPI: actualiza el número en pantalla y la variable global
-  function countApiCallback(res) {
-    var total = (res && (res.value ?? res.count)) || 0;
-    var el = document.getElementById('visitCount');
-    if (el) el.textContent = String(total);
-    window.visitCount = total;
-    visitCount = total;
-  }
-</script>
-<script async src="https://api.countapi.xyz/hit/evarelena.github.io/Informes-de-Laboratorio-Fisica-General-TEC?callback=countApiCallback"></script>
-    
+
 <!-- Tu script -->
-<script src="script.js?v=6" defer></script>
+<script src="script.js" defer></script>
 </body>
 </html>
+0 commit comments
+Comments
+0
+ (0)
+Comment
