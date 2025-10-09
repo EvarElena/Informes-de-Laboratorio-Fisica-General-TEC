@@ -431,14 +431,7 @@ function showNotification(message, type = 'info') {
   n.innerHTML = `
     <div class="notification-content">
       <i class="fas fa-${type === 'success' ? 'check-circle' : 'info-circle'}"></i>
-      <span>${message}</span>
-    </div>
-  `;
-  n.style.cssText = `
-    position: fixed; top: 20px; right: 20px;
-    background: ${type === 'success' ? 'linear-gradient(135deg, #48bb78, #38a169)' : 'linear-gradient(135deg, #667eea, #764ba2)'};
-    color: white; padding: 15px 20px; border-radius: 10px; box-shadow: 0 8px 25px rgba(0,0,0,.2);
-    z-index: 10000; transform: translateX(100%); transition: transform .3s ease; max-width: 300px;
+       z-index: 10000; transform: translateX(100%); transition: transform .3s ease; max-width: 300px;
   `;
   document.body.appendChild(n);
   setTimeout(() => (n.style.transform = 'translateX(0)'), 100);
@@ -464,6 +457,12 @@ function animateNumber(element, start, end, duration) {
 window.addEventListener('load', function () {
   const visitCountElement = document.getElementById('visitCount');
   if (visitCountElement) animateNumber(visitCountElement, 0, visitCount, 800);
+  if (visitCountElement) {
+    const startValue = parseInt(visitCountElement.textContent || '0', 10);
+    const targetValue = typeof window.visitCount === 'number' ? window.visitCount : visitCount;
+    animateNumber(visitCountElement, startValue, targetValue, 800);
+    visitCount = targetValue;
+  }
 
   setTimeout(() => {
     const totalCompleted = document.getElementById('totalCompleted');
@@ -482,6 +481,13 @@ notificationStyles.textContent = `
   .congratulations-content{display:flex;align-items:center;gap:15px}
   .congratulations-icon{font-size:2.5rem;animation:bounce .6s ease-in-out;flex-shrink:0}
   .congratulations-text h3{margin:0 0 8px 0;font-size:1.3rem;font-weight:700}
+  .congratulations-text p{margin:0;font-size:1rem;opacity:.9;line-height:1.3}
+  .final-congratulations-content{display:flex;flex-direction:column;align-items:center;gap:20px}
+  .final-congratulations-icon{font-size:4rem;animation:bounce .8s ease-in-out infinite}
+  .final-congratulations-text h2{margin:0 0 15px 0;font-size:2.5rem;font-weight:800;text-shadow:2px 2px 4px rgba(0,0,0,.3)}
+  .final-congratulations-text p{margin:0 0 10px 0;font-size:1.3rem;opacity:.95}
+  .final-subtitle{font-size:1.1rem!important;opacity:.8!important;font-style:italic}
+  @keyframes bounce{0%,20%,50%,80%,100%{transform:translateY(0)}40%{transform:translateY(-10px)}60%{transform:translateY(-5px)}}
   .congratulations-text p{margin:0;font-size:1rem;opacity:.9;line-height:1.3}
   .final-congratulations-content{display:flex;flex-direction:column;align-items:center;gap:20px}
   .final-congratulations-icon{font-size:4rem;animation:bounce .8s ease-in-out infinite}
