@@ -24,7 +24,7 @@ async function initializeVisitCounter() {
 
   // Define un namespace y key únicos para tu proyecto
   const NAMESPACE = 'evarelena.github.io'; // dominio base de tu GitHub Pages
-  const KEY = 'Informes-de-Laboratorio-Fisica-General'; // nombre único del contador
+  const KEY = 'Informes-de-Laboratorio-Fisica-General-TEC'; // nombre único del contador
 
   // URLs de la API
   const urlHit = `https://api.countapi.xyz/hit/${encodeURIComponent(NAMESPACE)}/${encodeURIComponent(KEY)}`;
