@@ -377,8 +377,18 @@
 
 <!-- Cargar jsPDF antes del script principal -->
 <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
-
+<script>
+  // Callback JSONP de CountAPI: actualiza el número en pantalla y la variable global
+  function countApiCallback(res) {
+    var total = (res && (res.value ?? res.count)) || 0;
+    var el = document.getElementById('visitCount');
+    if (el) el.textContent = String(total);
+    window.visitCount = total;
+  }
+</script>
+<script async src="https://api.countapi.xyz/hit/evarelena.github.io/Informes-de-Laboratorio-Fisica-General-TEC?callback=countApiCallback"></script>
+    
 <!-- Tu script -->
-<script src="script.js" defer></script>
+<script src="script.js?v=6" defer></script>
 </body>
 </html>
