@@ -7,54 +7,61 @@
 let visitCount = 0;
 let checklistData = {};
 
-// Inicialización cuando se carga la página
-document.addEventListener('DOMContentLoaded', function () {
-  initializeVisitCounter();  // contador global (CountAPI)
-  initializeChecklist();
-  initializeModal();
-  initializeActionButtons();
-});
-
 // -----------------------
-// Contador de visitas global (CountAPI) con fallback local
+// Contador de visitas global (CountAPI) con create + fallback
 // -----------------------
 async function initializeVisitCounter() {
   const el = document.getElementById('visitCount');
   if (!el) return;
 
-  // Define un namespace y key únicos para tu proyecto
-  const NAMESPACE = 'evarelena.github.io'; // dominio base de tu GitHub Pages
-  const KEY = 'Informes-de-Laboratorio-Fisica-General-TEC'; // nombre único del contador
+  // Usa un namespace y key estables y ASCII (evita tildes reales)
+  const NAMESPACE = 'evarelena.github.io';
+  const KEY = 'Informes-de-Laboratorio-F-sica-General-TEC'; // coincide con tu slug público
 
-  // URLs de la API
-  const urlHit = `https://api.countapi.xyz/hit/${encodeURIComponent(NAMESPACE)}/${encodeURIComponent(KEY)}`;
-  const urlGet = `https://api.countapi.xyz/get/${encodeURIComponent(NAMESPACE)}/${encodeURIComponent(KEY)}`;
+  const base = 'https://api.countapi.xyz';
+  const urlCreate = `${base}/create?namespace=${encodeURIComponent(NAMESPACE)}&key=${encodeURIComponent(KEY)}&value=0`;
+  const urlHit    = `${base}/hit/${encodeURIComponent(NAMESPACE)}/${encodeURIComponent(KEY)}`;
+  const urlGet    = `${base}/get/${encodeURIComponent(NAMESPACE)}/${encodeURIComponent(KEY)}`;
+
+  // Helper con logs
+  async function safeFetch(url, desc) {
+    try {
+      const r = await fetch(url, { cache: 'no-store' });
+      console.log('[CountAPI]', desc, r.status, url);
+      if (!r.ok) throw new Error(`${desc} status ${r.status}`);
+      const data = await r.json();
+      console.log('[CountAPI] data', data);
+      return data;
+    } catch (e) {
+      console.error('[CountAPI] error in', desc, e);
+      throw e;
+    }
+  }
 
   try {
-    // Incrementa y obtiene el total global
-    const res = await fetch(urlHit, { cache: 'no-store' });
-    if (!res.ok) throw new Error('CountAPI hit failed');
-    const data = await res.json();
-    const total = data.value ?? data.count ?? 0;
-    el.textContent = total.toString();
-  } catch (e) {
-    // Si hay error, intenta leer el valor sin incrementar
+    // 1) Crea si no existe (idempotente)
+    await safeFetch(urlCreate, 'create');
+
+    // 2) Incrementa y muestra
+    const hit = await safeFetch(urlHit, 'hit');
+    const total = (hit.value ?? hit.count ?? 0);
+    el.textContent = String(total);
+  } catch {
+    // 3) Si falló el hit, al menos intenta leer
     try {
-      const res2 = await fetch(urlGet, { cache: 'no-store' });
-      const data2 = await res2.json();
-      const total2 = data2.value ?? data2.count ?? 0;
-      el.textContent = total2.toString();
+      const get = await safeFetch(urlGet, 'get');
+      const total2 = (get.value ?? get.count ?? 0);
+      el.textContent = String(total2);
     } catch {
-      // Fallback: contador local por si CountAPI no responde
-      const storedCount = localStorage.getItem('visitCount');
-      let local = storedCount ? parseInt(storedCount, 10) : 0;
+      // 4) Fallback local por si la red bloquea CountAPI
+      const stored = localStorage.getItem('visitCount');
+      let local = stored ? parseInt(stored, 10) : 0;
       local++;
-      localStorage.setItem('visitCount', local.toString());
-      el.textContent = local.toString();
+      localStorage.setItem('visitCount', String(local));
+      el.textContent = String(local);
     }
   }
 }
-
 
 // -----------------------
 // Inicializar checklist
