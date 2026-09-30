@@ -145,6 +145,14 @@
         .gp-body ul { margin: 0 0 0.6rem; padding-left: 1.2rem; }
         .gp-body li { margin-bottom: 0.3rem; }
 
+        .gp-group {
+            margin-top: 1.25rem;
+            padding-top: 0.25rem;
+            border-top: 1px dashed var(--gp-border);
+        }
+        .gp-group .gp-group { margin-top: 0.75rem; border-top: none; padding-top: 0; }
+        .gp-group h4 i { color: var(--gp-accent); width: 1.1em; }
+
         .gp-meta { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.9rem; }
         .gp-chip {
             display: inline-flex; align-items: center; gap: 0.35rem;
@@ -503,11 +511,15 @@
     <!-- =====================================================================
          CONTENIDO DE LAS INSTRUCCIONES POR SECCIÓN
          Cada <template id="guia-X"> corresponde a data-section="X".
-         Para editar el texto, cámbialo aquí; no hace falta tocar el script.
+         Las líneas <div data-include="nombre"></div> insertan un bloque
+         compartido (<template id="bloque-nombre">), definido más abajo.
+         Así, lo de lenguaje, ecuaciones, figuras, tablas y gráficos se edita
+         en un solo lugar y aparece en todas las secciones donde se usa.
          ===================================================================== -->
 
     <template id="guia-titulo">
         <p>El título debe describir o predecir el contenido del informe en forma clara y concisa.</p>
+        <div data-include="mayusculas"></div>
     </template>
 
     <template id="guia-autoria">
@@ -546,14 +558,11 @@
             <li>Es autónomo: se entiende sin consultar ningún otro documento.</li>
             <li>Se recomienda redactarlo al terminar todo el informe.</li>
         </ul>
+        <div data-include="lenguaje"></div>
     </template>
 
     <template id="guia-palabras-clave">
         <p>Son palabras que describen los elementos más relevantes del informe.</p>
-        <div class="gp-example">
-            <span class="gp-example-label">Ejemplo de formato (tomado de la guía)</span>
-            Palabras clave: escritura científica, artículo científico, laboratorio de física básica
-        </div>
     </template>
 
     <template id="guia-introduccion">
@@ -566,23 +575,14 @@
         <ul>
             <li>Menciona solo la teoría relevante para el experimento.</li>
             <li>Cita siempre las fuentes de donde se toma la información.</li>
-            <li>Puedes usar ecuaciones, diagramas o imágenes para aclarar conceptos; cada uno se numera por orden de aparición.</li>
+            <li>Puedes usar ecuaciones, diagramas o imágenes para aclarar conceptos.</li>
             <li>No es necesario derivar ecuaciones ni describir la teoría exhaustivamente. Si una deducción es muy larga, va en un apéndice.</li>
-            <li>Los diagramas o gráficos que no son de elaboración propia llevan su fuente.</li>
         </ul>
-        <h4>Ecuaciones</h4>
-        <ul>
-            <li>Se numeran según su orden de aparición, para poder referirse a ellas.</li>
-            <li>La primera vez que aparece una ecuación se explica qué representa cada término.</li>
-        </ul>
-        <div class="gp-example gp-good">
-            <span class="gp-example-label">Ejemplo</span>
-            El periodo <em>T</em> de oscilación de un péndulo físico se determina con
-            <em>T</em> = 2π √(<em>I</em> / <em>mgd</em>)&nbsp;&nbsp;(1),
-            donde <em>m</em> e <em>I</em> son la masa y el momento de inercia del péndulo, y <em>d</em> es la distancia desde el eje de rotación hasta el centro de masa.
-        </div>
         <h4>Objetivos</h4>
         <p>Se exponen de forma clara y precisa el objetivo principal y los objetivos específicos del experimento.</p>
+        <div data-include="ecuaciones"></div>
+        <div data-include="figuras"></div>
+        <div data-include="lenguaje"></div>
     </template>
 
     <template id="guia-materiales-metodos">
@@ -598,6 +598,8 @@
             <li>De los instrumentos se incluyen detalles técnicos como marca y modelo.</li>
         </ul>
         <p>Debe permitir que otra persona profesional del área valide los resultados al repetir el procedimiento.</p>
+        <div data-include="figuras"></div>
+        <div data-include="lenguaje"></div>
     </template>
 
     <template id="guia-resultados">
@@ -613,38 +615,11 @@
             <li>Datos que demuestren cómo se cumplieron los objetivos. Por ejemplo, si el objetivo era analizar la velocidad <em>v<sub>y</sub></em> en caída libre, una gráfica de <em>v<sub>y</sub></em> en función del tiempo <em>t</em>.</li>
             <li>Los conjuntos grandes de datos y cálculos no van aquí: pueden ir en un apéndice o almacenarse electrónicamente, indicando cómo acceder a ellos.</li>
         </ul>
-        <h4>Tablas</h4>
-        <ul>
-            <li>Se numeran según su orden de aparición y cada una lleva su título. También puede usarse la palabra "Cuadro".</li>
-            <li>Usan la cantidad correcta de cifras significativas.</li>
-            <li>Las unidades de los valores numéricos quedan claras.</li>
-            <li>Los encabezados de fila y columna se distinguen del resto del contenido.</li>
-        </ul>
-        <h4>Gráficos</h4>
-        <ul>
-            <li>Todas las imágenes, diagramas y gráficos se consideran "Figuras" y se numeran en orden.</li>
-            <li>Los ejes tienen etiquetas y unidades apropiadas.</li>
-            <li>La ecuación de mejor ajuste se escribe con los símbolos de las variables graficadas.</li>
-            <li>Los gráficos que no son de elaboración propia llevan su fuente.</li>
-        </ul>
-        <div class="gp-example gp-bad">
-            <span class="gp-example-label">Evita</span>
-            y = −9.81x + 2.74
-        </div>
-        <div class="gp-example gp-good">
-            <span class="gp-example-label">Mejor</span>
-            v = −9.81t + 2.74
-        </div>
-        <h4>Cómo referirse a tablas y figuras</h4>
-        <p>Se mencionan por su número, no por su ubicación en la página.</p>
-        <div class="gp-example gp-bad">
-            <span class="gp-example-label">Evita</span>
-            …se muestra en la figura a continuación.
-        </div>
-        <div class="gp-example gp-good">
-            <span class="gp-example-label">Mejor</span>
-            …se muestra en la Figura 2.
-        </div>
+        <div data-include="ecuaciones"></div>
+        <div data-include="figuras"></div>
+        <div data-include="tablas"></div>
+        <div data-include="graficos"></div>
+        <div data-include="lenguaje"></div>
     </template>
 
     <template id="guia-discusion">
@@ -664,6 +639,8 @@
             <li>Algunos ejemplos: precisión limitada de los instrumentos, ignorar la resistencia del aire, cambios de temperatura o humedad.</li>
             <li>Siempre que sea posible, cuantifica los errores (aunque sea de forma aproximada) y clasifícalos.</li>
         </ul>
+        <div data-include="referir"></div>
+        <div data-include="lenguaje"></div>
     </template>
 
     <template id="guia-conclusiones">
@@ -679,6 +656,7 @@
             <li>Si otras personas investigadoras hicieron un trabajo similar, se puede comparar con sus resultados, citando ese trabajo.</li>
             <li>Se escriben en prosa, no como lista.</li>
         </ul>
+        <div data-include="lenguaje"></div>
     </template>
 
     <template id="guia-referencias">
@@ -691,6 +669,7 @@
     </template>
 
     <template id="guia-presentacion">
+        <p>Estas indicaciones aplican a todo el informe. Si se reparten las secciones entre varias personas, conviene revisarlas juntas al final para que el documento quede uniforme.</p>
         <h4>Tiempos verbales por sección</h4>
         <table class="gp-table">
             <thead><tr><th>Sección</th><th>Tiempo</th></tr></thead>
@@ -703,26 +682,8 @@
                 <tr><td>Conclusiones</td><td>Pasado</td></tr>
             </tbody>
         </table>
-        <h4>Persona gramatical</h4>
-        <p>Se recomienda la forma impersonal o la voz pasiva; también se permite la tercera persona. Así la redacción se mantiene objetiva y no se parcializa por la opinión de quien investiga.</p>
-        <div class="gp-example gp-good">
-            <span class="gp-example-label">Ejemplos</span>
-            "En esta sección se presentan los resultados de…", "En este artículo se desarrollan…"
-        </div>
-        <h4>Recomendaciones de lenguaje</h4>
-        <ul>
-            <li>Usa mayúsculas solo para nombres propios, no para conceptos.</li>
-            <li>Evita palabras comodín como "ser", "tener", "hacer", "poner" o "importante".</li>
-            <li>Evita reiteraciones enfáticas.</li>
-        </ul>
-        <div class="gp-example gp-bad">
-            <span class="gp-example-label">Evita</span>
-            se vuelve a reiterar
-        </div>
-        <div class="gp-example gp-good">
-            <span class="gp-example-label">Mejor</span>
-            se reitera
-        </div>
+        <div data-include="lenguaje"></div>
+        <div data-include="referir"></div>
         <h4>Artículos de ejemplo</h4>
         <p>La guía recomienda tres artículos de la revista <em>Tecnología en Marcha</em> del TEC:</p>
         <ul>
@@ -730,6 +691,116 @@
             <li><a href="https://revistas.tec.ac.cr/index.php/tec_marcha/article/view/3191/pdf" target="_blank" rel="noopener">Análisis de pintura automotriz mediante espectroscopía Raman para uso forense</a></li>
             <li><a href="https://revistas.tec.ac.cr/index.php/tec_marcha/article/view/4482/4078" target="_blank" rel="noopener">Desarrollo de un sistema automatizado de escaneo por radiación gamma</a></li>
         </ul>
+    </template>
+
+    <!-- =====================================================================
+         BLOQUES COMPARTIDOS (aspectos de presentación de la guía)
+         Se insertan en las secciones mediante <div data-include="nombre">.
+         ===================================================================== -->
+
+    <template id="bloque-lenguaje">
+        <div class="gp-group">
+            <h4><i class="fas fa-spell-check" aria-hidden="true"></i> Lenguaje</h4>
+            <ul>
+                <li>Redacta en forma impersonal o en voz pasiva; también se permite la tercera persona. Así el texto se mantiene objetivo y no se parcializa por la opinión de quien investiga.</li>
+                <li>Usa mayúsculas solo para nombres propios, no para conceptos.</li>
+                <li>Evita palabras comodín como "ser", "tener", "hacer", "poner" o "importante".</li>
+                <li>Evita reiteraciones enfáticas.</li>
+            </ul>
+            <div class="gp-example gp-good">
+                <span class="gp-example-label">Forma impersonal</span>
+                "En esta sección se presentan los resultados de…", "En este artículo se desarrollan…"
+            </div>
+            <div class="gp-example gp-bad">
+                <span class="gp-example-label">Evita</span>
+                se vuelve a reiterar
+            </div>
+            <div class="gp-example gp-good">
+                <span class="gp-example-label">Mejor</span>
+                se reitera
+            </div>
+        </div>
+    </template>
+
+    <template id="bloque-mayusculas">
+        <div class="gp-group">
+            <h4><i class="fas fa-spell-check" aria-hidden="true"></i> Lenguaje</h4>
+            <ul>
+                <li>Usa mayúsculas solo para nombres propios, no para conceptos.</li>
+            </ul>
+        </div>
+    </template>
+
+    <template id="bloque-ecuaciones">
+        <div class="gp-group">
+            <h4><i class="fas fa-square-root-alt" aria-hidden="true"></i> Ecuaciones</h4>
+            <ul>
+                <li>Todas las ecuaciones se numeran según su orden de aparición. La numeración permite referirse a ellas; por ejemplo, "según la ecuación (1)…".</li>
+                <li>La primera vez que aparece una ecuación se explica qué representa cada uno de sus términos.</li>
+            </ul>
+            <div class="gp-example gp-good">
+                <span class="gp-example-label">Ejemplo</span>
+                El periodo <em>T</em> de oscilación de un péndulo físico se determina con
+                <em>T</em> = 2π √(<em>I</em> / <em>mgd</em>)&nbsp;&nbsp;(1),
+                donde <em>m</em> e <em>I</em> son la masa y el momento de inercia del péndulo, y <em>d</em> es la distancia desde el eje de rotación hasta el centro de masa.
+            </div>
+        </div>
+    </template>
+
+    <template id="bloque-figuras">
+        <div class="gp-group">
+            <h4><i class="fas fa-image" aria-hidden="true"></i> Figuras y tablas</h4>
+            <ul>
+                <li>Todas las imágenes, diagramas y gráficos se consideran "Figuras"; cualquier dato tabulado es una "Tabla" (también puede llamarse "Cuadro").</li>
+                <li>Se numeran según su orden de aparición y cada una lleva su título.</li>
+                <li>Las que no son de elaboración propia deben indicar su fuente o referencia.</li>
+            </ul>
+            <div data-include="referir"></div>
+        </div>
+    </template>
+
+    <template id="bloque-referir">
+        <div class="gp-group">
+            <h4><i class="fas fa-link" aria-hidden="true"></i> Cómo referirse a figuras y tablas</h4>
+            <p>Se mencionan por su número, no por su ubicación en la página.</p>
+            <div class="gp-example gp-bad">
+                <span class="gp-example-label">Evita</span>
+                La variación del periodo <em>T</em> en función de la distancia <em>d</em> se muestra en la figura a continuación.
+            </div>
+            <div class="gp-example gp-good">
+                <span class="gp-example-label">Mejor</span>
+                La variación del periodo <em>T</em> en función de la distancia <em>d</em> se muestra en la Figura 2.
+            </div>
+        </div>
+    </template>
+
+    <template id="bloque-tablas">
+        <div class="gp-group">
+            <h4><i class="fas fa-table" aria-hidden="true"></i> Tablas</h4>
+            <ul>
+                <li>Usan la cantidad correcta de cifras significativas.</li>
+                <li>Las unidades de los valores numéricos quedan claras.</li>
+                <li>Los encabezados de fila y columna se distinguen del resto del contenido.</li>
+            </ul>
+        </div>
+    </template>
+
+    <template id="bloque-graficos">
+        <div class="gp-group">
+            <h4><i class="fas fa-chart-line" aria-hidden="true"></i> Gráficos</h4>
+            <ul>
+                <li>Los ejes tienen etiquetas y unidades apropiadas.</li>
+                <li>La ecuación de mejor ajuste se escribe con los símbolos de las variables graficadas.</li>
+            </ul>
+            <div class="gp-example gp-bad">
+                <span class="gp-example-label">Evita</span>
+                y = −9.81x + 2.74
+            </div>
+            <div class="gp-example gp-good">
+                <span class="gp-example-label">Mejor</span>
+                v = −9.81t + 2.74
+            </div>
+        </div>
     </template>
 
     <!-- Cargar jsPDF antes del script principal -->
@@ -772,6 +843,19 @@
             });
         });
 
+        // Copia la plantilla e inserta los bloques compartidos (data-include)
+        function buildContent(tpl) {
+            const frag = tpl.content.cloneNode(true);
+            let guard = 0;
+            let slot;
+            while ((slot = frag.querySelector('[data-include]')) && guard++ < 50) {
+                const block = document.getElementById('bloque-' + slot.dataset.include);
+                if (block) { slot.replaceWith(block.content.cloneNode(true)); }
+                else { slot.remove(); }
+            }
+            return frag;
+        }
+
         function setButton(btn, active) {
             btn.classList.toggle('is-active', active);
             btn.setAttribute('aria-expanded', String(active));
@@ -785,7 +869,7 @@
             }
             const h3 = section.querySelector('.section-header h3');
             title.textContent = h3 ? h3.textContent.trim() : '';
-            body.replaceChildren(tpl.content.cloneNode(true));
+            body.replaceChildren(buildContent(tpl));
             body.scrollTop = 0;
 
             panel.classList.add('is-open');
