@@ -196,7 +196,7 @@
         .gp-body math { font-family: "Cambria Math", "STIX Two Math", "Latin Modern Math", serif; }
 
         /* Tabla y figura de ejemplo */
-        .gp-caption { font-size: 0.85rem; margin: 0 0 0.4rem; }
+        .gp-caption { font-size: 0.85rem; margin: 0 0 0.4rem; text-align: center; }
         .gp-demo-table {
             margin: 0 auto;
             border-collapse: collapse;
@@ -208,7 +208,8 @@
         .gp-demo-table tbody tr:last-child td { border-bottom: 1.5px solid #333; }
 
         .gp-figure { margin: 0.2rem 0 0; }
-        .gp-figure svg { display: block; width: 100%; height: auto; background: #fff; border-radius: 4px; }
+        .gp-figure { text-align: center; }
+        .gp-figure svg { display: block; width: 100%; max-width: 340px; height: auto; margin: 0 auto; background: #fff; border-radius: 4px; }
         .gp-figure figcaption { margin: 0.4rem 0 0; }
         .gp-plot-grid line { stroke: #e5e7eb; stroke-width: 1; }
         .gp-plot-axis line { stroke: #333; stroke-width: 1.2; }
@@ -637,7 +638,7 @@
             <li><strong>Objetivo:</strong> "Se determinó la aceleración de la gravedad a partir de la caída libre de una esfera."</li>
             <li><strong>Método:</strong> "Se midió la velocidad de la esfera en distintos instantes con un sensor de movimiento."</li>
             <li><strong>Resultado principal:</strong> "Se obtuvo un valor de 9.8 ± 0.2 m/s²."</li>
-            <li><strong>Observación importante,</strong> si la hubo.</li>
+            <li><strong>Observación importante,</strong> si la hubo: "Se observó que en uno de los intentos la esfera rozó el soporte al soltarla, por lo que ese intento se descartó."</li>
             <li><strong>Conclusión:</strong> "El valor coincidió con el esperado, por lo que se cumplió el objetivo."</li>
         </ol>
         <h4>Qué no debe tener</h4>
@@ -660,7 +661,26 @@
     </template>
 
     <template id="guia-palabras-clave">
-        <p>Son unas pocas palabras que describen los temas más importantes del informe.</p>
+        <p>Son unas pocas palabras que describen los temas más importantes del informe. Sirven para que otras personas encuentren el trabajo cuando buscan sobre ese tema.</p>
+        <ul>
+            <li>Van justo después del resumen.</li>
+            <li>Se escogen entre tres y seis.</li>
+            <li>Nombran conceptos, variables o fenómenos del experimento.</li>
+            <li>No son palabras demasiado generales como "laboratorio", "informe" o "física".</li>
+            <li>No repiten las palabras del título, salvo que sea indispensable.</li>
+            <li>Se escriben en minúscula, separadas por comas y sin punto al final.</li>
+        </ul>
+        <div class="gp-pair">
+            <div class="gp-example gp-bad">
+                <span class="gp-example-label">Evita</span>
+                Palabras clave: Laboratorio, Física, Informe, Caída Libre.
+            </div>
+            <div class="gp-example gp-good">
+                <span class="gp-example-label">Mejor</span>
+                Palabras clave: movimiento uniformemente acelerado, velocidad instantánea, sensor de movimiento, regresión lineal
+            </div>
+        </div>
+        <p>Si el título es "Determinación de la aceleración de la gravedad mediante la caída libre de una esfera", las palabras clave del ejemplo agregan información nueva en lugar de repetirlo.</p>
     </template>
 
     <template id="guia-introduccion">
@@ -681,9 +701,17 @@
             <li>No hace falta deducir las ecuaciones. Si una deducción es muy larga, va en un apéndice al final.</li>
         </ul>
         <h4>Objetivos</h4>
-        <p>La introducción termina con el objetivo general y los objetivos específicos, escritos de forma clara.</p>
+        <p>La introducción termina con el objetivo general y los objetivos específicos, escritos en forma clara y en prosa. Se presentan como un párrafo: sin subtítulos como "Objetivo general" u "Objetivos específicos" y sin viñetas.</p>
+        <div class="gp-example gp-bad">
+            <span class="gp-example-label">Evita</span>
+            <strong>Objetivo general</strong><br>
+            • Determinar la aceleración de la gravedad.<br>
+            <strong>Objetivos específicos</strong><br>
+            • Medir la velocidad de la esfera.<br>
+            • Analizar cómo cambia con el tiempo.
+        </div>
         <div class="gp-example gp-good">
-            <span class="gp-example-label">Ejemplo</span>
+            <span class="gp-example-label">Mejor</span>
             El objetivo general de esta práctica es determinar la aceleración de la gravedad a partir de la caída libre de una esfera. Para ello, se plantean como objetivos específicos medir la velocidad de la esfera en distintos instantes y analizar cómo cambia con el tiempo.
         </div>
         <div data-include="ecuaciones"></div>
@@ -916,6 +944,7 @@
                 <li>Las imágenes, diagramas y gráficas se llaman <strong>Figura</strong>. Los datos ordenados en filas y columnas se llaman <strong>Tabla</strong> (también se acepta "Cuadro").</li>
                 <li>Se numeran por separado y en orden de aparición: Figura 1, Figura 2…; Tabla 1, Tabla 2…</li>
                 <li>Cada una lleva un título que describe su contenido. En las tablas va arriba; en las figuras, abajo.</li>
+                <li>Las figuras, las tablas y sus títulos van centrados en la página.</li>
                 <li>Si la figura no es tuya, indica de dónde la tomaste.</li>
             </ul>
             <div class="gp-example gp-good">
@@ -943,6 +972,7 @@
             <ul>
                 <li>Créalas en el documento, no las pegues como imagen.</li>
                 <li>El número y el título van <strong>arriba</strong> de la tabla. El título explica qué contiene.</li>
+                <li>La tabla y su título van centrados.</li>
                 <li>Cada encabezado dice qué variable es y su unidad entre paréntesis.</li>
                 <li>Los encabezados se distinguen del resto (por ejemplo, con una línea o en negrita).</li>
                 <li>Usa la cantidad correcta de cifras significativas.</li>
@@ -974,6 +1004,7 @@
             <h4><i class="fas fa-chart-line" aria-hidden="true"></i> Gráficas</h4>
             <ul>
                 <li>Una gráfica es una figura: el número y el título van <strong>abajo</strong>, no dentro de la gráfica.</li>
+                <li>La gráfica y su título van centrados.</li>
                 <li>Cada eje dice qué variable representa y su unidad, por ejemplo "<em>t</em> (s)".</li>
                 <li>Si agregas la línea de tendencia, muestra su ecuación escrita con las variables de los ejes (ver la nota abajo).</li>
                 <li>Aprovecha el espacio: que los datos ocupen la gráfica, sin grandes zonas vacías.</li>
