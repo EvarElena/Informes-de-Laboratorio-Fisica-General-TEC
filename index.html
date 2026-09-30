@@ -153,6 +153,73 @@
         .gp-group .gp-group { margin-top: 0.75rem; border-top: none; padding-top: 0; }
         .gp-group h4 i { color: var(--gp-accent); width: 1.1em; }
 
+        /* Recuadro "Cómo se escribe" */
+        .gp-howto {
+            margin: 0 0 1rem;
+            padding: 0.75rem 0.9rem;
+            background: var(--gp-accent-soft);
+            border: 1px solid rgba(37, 99, 235, 0.2);
+            border-radius: 8px;
+        }
+        .gp-howto-title { margin: 0 0 0.4rem !important; font-weight: 700; color: var(--gp-accent); }
+        .gp-howto dl {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 0.2rem 0.75rem;
+            margin: 0 0 0.45rem;
+        }
+        .gp-howto dt { font-weight: 600; }
+        .gp-howto dd { margin: 0; }
+        .gp-howto-ex { margin: 0 !important; font-size: 0.86rem; color: var(--gp-muted); font-style: italic; }
+
+        .gp-steps { margin: 0 0 0.6rem; padding-left: 1.3rem; }
+        .gp-steps li { margin-bottom: 0.35rem; }
+
+        /* Pares Evita / Mejor */
+        .gp-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin: 0.3rem 0 0.9rem; }
+        .gp-pair .gp-example { margin: 0; }
+        @media (max-width: 380px) { .gp-pair { grid-template-columns: 1fr; } }
+
+        .gp-example p { margin: 0 0 0.4rem; }
+        .gp-example p:last-child { margin-bottom: 0; }
+        .gp-authors p { margin: 0 0 0.3rem; line-height: 1.4; }
+
+        /* Ecuación en un renglón */
+        .gp-eq {
+            display: flex;
+            align-items: center;
+            margin: 0.5rem 0;
+            font-size: 1.1rem;
+        }
+        .gp-eq math { flex: 1; text-align: center; white-space: nowrap; }
+        .gp-eq-num { font-size: 0.95rem; }
+        .gp-body math { font-family: "Cambria Math", "STIX Two Math", "Latin Modern Math", serif; }
+
+        /* Tabla y figura de ejemplo */
+        .gp-caption { font-size: 0.85rem; margin: 0 0 0.4rem; }
+        .gp-demo-table {
+            margin: 0 auto;
+            border-collapse: collapse;
+            font-variant-numeric: tabular-nums;
+            background: #fff;
+        }
+        .gp-demo-table th, .gp-demo-table td { padding: 0.2rem 1.1rem; text-align: center; }
+        .gp-demo-table thead th { border-top: 1.5px solid #333; border-bottom: 1px solid #333; font-weight: 600; }
+        .gp-demo-table tbody tr:last-child td { border-bottom: 1.5px solid #333; }
+
+        .gp-figure { margin: 0.2rem 0 0; }
+        .gp-figure svg { display: block; width: 100%; height: auto; background: #fff; border-radius: 4px; }
+        .gp-figure figcaption { margin: 0.4rem 0 0; }
+        .gp-plot-grid line { stroke: #e5e7eb; stroke-width: 1; }
+        .gp-plot-axis line { stroke: #333; stroke-width: 1.2; }
+        .gp-plot-ticks text { font-size: 11px; fill: #444; }
+        .gp-plot-label { font-size: 12.5px; fill: #222; }
+        .gp-plot-points circle { fill: var(--gp-accent); }
+        .gp-plot-trend { stroke: #333; stroke-width: 1.2; stroke-dasharray: 5 4; }
+        .gp-plot-eq text { font-size: 12.5px; fill: #222; }
+
+        .gp-footer p { margin: 0 0 0.4rem; color: var(--gp-muted); font-size: 0.8rem; line-height: 1.45; }
+
         .gp-meta { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.9rem; }
         .gp-chip {
             display: inline-flex; align-items: center; gap: 0.35rem;
@@ -493,7 +560,7 @@
     <aside id="guidePanel" class="guide-panel" aria-labelledby="guidePanelTitle">
         <div class="gp-header">
             <div class="gp-header-text">
-                <p class="gp-kicker">Según la Guía para Elaborar Informes</p>
+                <p class="gp-kicker">Instrucciones basadas en la guía del curso</p>
                 <h2 id="guidePanelTitle" class="gp-title" tabindex="-1"></h2>
             </div>
             <button type="button" id="guidePanelClose" class="gp-close" aria-label="Cerrar instrucciones">
@@ -502,6 +569,7 @@
         </div>
         <div id="guidePanelBody" class="gp-body"></div>
         <div class="gp-footer">
+            <p>Estas instrucciones están basadas en la <em>Guía básica para la elaboración de un informe de laboratorio tipo artículo</em> (Jiménez y Sánchez, Escuela de Física, TEC). Los ejemplos usan un mismo experimento de caída libre y son solo ilustrativos.</p>
             <a href="Guia_para_elaborar_informes.pdf" target="_blank" rel="noopener">
                 <i class="fas fa-file-pdf" aria-hidden="true"></i> Abrir la guía completa (PDF)
             </a>
@@ -510,111 +578,171 @@
 
     <!-- =====================================================================
          CONTENIDO DE LAS INSTRUCCIONES POR SECCIÓN
+         Basado en la "Guía básica para la elaboración de un informe de
+         laboratorio tipo artículo" (Jiménez y Sánchez, Escuela de Física, TEC).
+         Todos los ejemplos usan un mismo experimento de caída libre.
+
          Cada <template id="guia-X"> corresponde a data-section="X".
          Las líneas <div data-include="nombre"></div> insertan un bloque
          compartido (<template id="bloque-nombre">), definido más abajo.
-         Así, lo de lenguaje, ecuaciones, figuras, tablas y gráficos se edita
-         en un solo lugar y aparece en todas las secciones donde se usa.
          ===================================================================== -->
 
     <template id="guia-titulo">
-        <p>El título debe describir o predecir el contenido del informe en forma clara y concisa.</p>
-        <div data-include="mayusculas"></div>
+        <p>El título dice de qué trata el informe. Debe ser claro y breve, de modo que con solo leerlo se sepa qué se estudió.</p>
+        <p>Solo llevan mayúscula la primera palabra y los nombres propios.</p>
+        <div class="gp-pair">
+            <div class="gp-example gp-bad">
+                <span class="gp-example-label">Evita</span>
+                Informe de Laboratorio 3: Caída Libre
+            </div>
+            <div class="gp-example gp-good">
+                <span class="gp-example-label">Mejor</span>
+                Determinación de la aceleración de la gravedad mediante la caída libre de una esfera
+            </div>
+        </div>
     </template>
 
     <template id="guia-autoria">
-        <h4>Qué incluir</h4>
+        <p>Aquí se indica quiénes escribieron el informe.</p>
         <ul>
-            <li>Los nombres de todas las personas autoras.</li>
-            <li>La afiliación institucional, usando el nombre completo de la institución.</li>
+            <li>El nombre completo de cada persona autora.</li>
+            <li>La institución a la que pertenece, escrita con su nombre completo (no solo "TEC").</li>
             <li>El correo electrónico.</li>
         </ul>
-        <p>El encabezado de la propia guía sirve como ejemplo de formato.</p>
+        <p>Los números y símbolos pequeños junto a cada nombre (superíndices) indican qué afiliación y qué correo le corresponden.</p>
+        <div class="gp-example">
+            <span class="gp-example-label">Ejemplo</span>
+            <div class="gp-authors">
+                <p><strong>Ana Pérez Mora<sup>1,*</sup>, Luis Rojas Vargas<sup>2,†</sup></strong></p>
+                <p><sup>1</sup>Escuela de Ingeniería Electrónica, Instituto Tecnológico de Costa Rica<br>
+                   <sup>2</sup>Escuela de Ingeniería en Computación, Instituto Tecnológico de Costa Rica</p>
+                <p><sup>*</sup>ana.perez@estudiantec.cr &nbsp; <sup>†</sup>luis.rojas@estudiantec.cr</p>
+            </div>
+        </div>
     </template>
 
     <template id="guia-resumen">
-        <div class="gp-meta">
-            <span class="gp-chip">Tiempo verbal: <strong>pasado</strong></span>
-            <span class="gp-chip">Redacción: <strong>impersonal</strong></span>
-            <span class="gp-chip">Extensión: <strong>100–250 palabras</strong></span>
+        <div class="gp-howto">
+            <p class="gp-howto-title">Cómo se escribe</p>
+            <dl>
+                <dt>Tiempo verbal</dt><dd>Pasado</dd>
+                <dt>Persona</dt><dd>Impersonal, con "se"</dd>
+                <dt>Extensión</dt><dd>Un párrafo de 100 a 250 palabras</dd>
+            </dl>
+            <p class="gp-howto-ex">Así suena: "Se determinó…", "Se midió…", "Se obtuvo…"</p>
         </div>
-        <p>Es la primera impresión que la persona lectora tendrá del trabajo realizado y de los resultados obtenidos. Es un solo párrafo breve.</p>
-        <h4>Debe sintetizar</h4>
+        <p>Es lo primero que se lee del informe. Cuenta en pocas líneas qué se hizo y qué se obtuvo. Escríbelo al final, cuando el resto del informe ya esté terminado.</p>
+        <h4>Qué debe contar, en este orden</h4>
+        <ol class="gp-steps">
+            <li><strong>Objetivo:</strong> "Se determinó la aceleración de la gravedad a partir de la caída libre de una esfera."</li>
+            <li><strong>Método:</strong> "Se midió la velocidad de la esfera en distintos instantes con un sensor de movimiento."</li>
+            <li><strong>Resultado principal:</strong> "Se obtuvo un valor de 9.8 ± 0.2 m/s²."</li>
+            <li><strong>Observación importante,</strong> si la hubo.</li>
+            <li><strong>Conclusión:</strong> "El valor coincidió con el esperado, por lo que se cumplió el objetivo."</li>
+        </ol>
+        <h4>Qué no debe tener</h4>
         <ul>
-            <li>El objetivo del experimento.</li>
-            <li>Los métodos utilizados.</li>
-            <li>Los resultados más importantes.</li>
-            <li>Alguna observación importante.</li>
-            <li>Las conclusiones.</li>
+            <li>Menciones a tablas, figuras, ecuaciones u otras partes del informe.</li>
+            <li>Abreviaturas, siglas ni palabras informales.</li>
         </ul>
-        <h4>No debe</h4>
-        <ul>
-            <li>Hacer referencia a datos, cálculos, tablas, figuras u otras partes del informe.</li>
-            <li>Incluir abreviaturas, acrónimos ni jerga.</li>
-        </ul>
-        <h4>Además</h4>
-        <ul>
-            <li>Sigue el mismo orden que la estructura del informe.</li>
-            <li>Es autónomo: se entiende sin consultar ningún otro documento.</li>
-            <li>Se recomienda redactarlo al terminar todo el informe.</li>
-        </ul>
+        <div class="gp-pair">
+            <div class="gp-example gp-bad">
+                <span class="gp-example-label">Evita</span>
+                Como se observa en la Figura 1, la rapidez aumentó.
+            </div>
+            <div class="gp-example gp-good">
+                <span class="gp-example-label">Mejor</span>
+                La rapidez de la esfera aumentó de forma constante durante la caída.
+            </div>
+        </div>
+        <p>El resumen debe entenderse por sí solo, sin leer el resto del informe.</p>
         <div data-include="lenguaje"></div>
     </template>
 
     <template id="guia-palabras-clave">
-        <p>Son palabras que describen los elementos más relevantes del informe.</p>
+        <p>Son unas pocas palabras que describen los temas más importantes del informe.</p>
     </template>
 
     <template id="guia-introduccion">
-        <div class="gp-meta">
-            <span class="gp-chip">Tiempo verbal: <strong>presente</strong></span>
-            <span class="gp-chip">Redacción: <strong>impersonal</strong></span>
+        <div class="gp-howto">
+            <p class="gp-howto-title">Cómo se escribe</p>
+            <dl>
+                <dt>Tiempo verbal</dt><dd>Presente</dd>
+                <dt>Persona</dt><dd>Impersonal, con "se"</dd>
+            </dl>
+            <p class="gp-howto-ex">Así suena: "Un objeto en caída libre se mueve con aceleración constante…"</p>
         </div>
-        <p>Prepara a la persona lectora para las siguientes partes del informe.</p>
-        <h4>Bases de la teoría</h4>
+        <p>Da a quien lee la base teórica que necesita para entender el experimento.</p>
+        <h4>Teoría</h4>
         <ul>
-            <li>Menciona solo la teoría relevante para el experimento.</li>
-            <li>Cita siempre las fuentes de donde se toma la información.</li>
-            <li>Puedes usar ecuaciones, diagramas o imágenes para aclarar conceptos.</li>
-            <li>No es necesario derivar ecuaciones ni describir la teoría exhaustivamente. Si una deducción es muy larga, va en un apéndice.</li>
+            <li>Explica solo la teoría relacionada con el experimento, no todo el tema.</li>
+            <li>Cita la fuente de toda la información que tomes de libros, artículos o sitios web.</li>
+            <li>Puedes usar ecuaciones, diagramas o imágenes si ayudan a entender.</li>
+            <li>No hace falta deducir las ecuaciones. Si una deducción es muy larga, va en un apéndice al final.</li>
         </ul>
         <h4>Objetivos</h4>
-        <p>Se exponen de forma clara y precisa el objetivo principal y los objetivos específicos del experimento.</p>
+        <p>La introducción termina con el objetivo general y los objetivos específicos, escritos de forma clara.</p>
+        <div class="gp-example gp-good">
+            <span class="gp-example-label">Ejemplo</span>
+            El objetivo general de esta práctica es determinar la aceleración de la gravedad a partir de la caída libre de una esfera. Para ello, se plantean como objetivos específicos medir la velocidad de la esfera en distintos instantes y analizar cómo cambia con el tiempo.
+        </div>
         <div data-include="ecuaciones"></div>
         <div data-include="figuras"></div>
         <div data-include="lenguaje"></div>
     </template>
 
     <template id="guia-materiales-metodos">
-        <div class="gp-meta">
-            <span class="gp-chip">Tiempo verbal: <strong>pasado</strong></span>
-            <span class="gp-chip">Redacción: <strong>impersonal</strong></span>
+        <div class="gp-howto">
+            <p class="gp-howto-title">Cómo se escribe</p>
+            <dl>
+                <dt>Tiempo verbal</dt><dd>Pasado</dd>
+                <dt>Persona</dt><dd>Impersonal, con "se"</dd>
+            </dl>
+            <p class="gp-howto-ex">Así suena: "Se soltó la esfera…", "Se registró la velocidad…"</p>
         </div>
-        <p>Responde la pregunta <strong>¿cómo se hizo?</strong></p>
+        <p>Responde la pregunta <strong>¿cómo se hizo el experimento?</strong></p>
         <ul>
-            <li>Es una descripción cronológica y detallada de los pasos seguidos y del equipo utilizado.</li>
-            <li>Se escribe en prosa, no como una lista de instrucciones.</li>
-            <li>Indica qué variables se registraron, qué observaciones se hicieron y qué instrumentos se usaron.</li>
-            <li>De los instrumentos se incluyen detalles técnicos como marca y modelo.</li>
+            <li>Cuenta los pasos en el orden en que se hicieron.</li>
+            <li>Escríbelo como un texto corrido, no como una lista de instrucciones.</li>
+            <li>Indica qué se midió, qué se observó y con qué instrumentos.</li>
+            <li>De cada instrumento, anota la marca y el modelo.</li>
         </ul>
-        <p>Debe permitir que otra persona profesional del área valide los resultados al repetir el procedimiento.</p>
+        <div class="gp-pair">
+            <div class="gp-example gp-bad">
+                <span class="gp-example-label">Evita</span>
+                1. Soltar la esfera.<br>2. Medir la velocidad.
+            </div>
+            <div class="gp-example gp-good">
+                <span class="gp-example-label">Mejor</span>
+                Se soltó una esfera de acero desde el reposo y se registró su velocidad con un sensor de movimiento [marca y modelo] conectado a una computadora.
+            </div>
+        </div>
+        <p>Pregúntate: ¿otra persona podría repetir el experimento solo con leer esta sección? Si la respuesta es sí, está completa.</p>
         <div data-include="figuras"></div>
         <div data-include="lenguaje"></div>
     </template>
 
     <template id="guia-resultados">
-        <div class="gp-meta">
-            <span class="gp-chip">Tiempo verbal: <strong>pasado</strong></span>
-            <span class="gp-chip">Redacción: <strong>impersonal</strong></span>
+        <div class="gp-howto">
+            <p class="gp-howto-title">Cómo se escribe</p>
+            <dl>
+                <dt>Tiempo verbal</dt><dd>Pasado</dd>
+                <dt>Persona</dt><dd>Impersonal, con "se"</dd>
+            </dl>
+            <p class="gp-howto-ex">Así suena: "Se obtuvo…", "Los valores medidos se muestran en la Tabla 1."</p>
         </div>
-        <h4>Qué presentar</h4>
+        <p>Muestra lo que se obtuvo en el experimento, sin dar opiniones.</p>
         <ul>
-            <li>Los resultados ya procesados, en tablas o gráficos, descritos de forma imparcial (sin primera persona).</li>
-            <li>Una breve descripción de cómo se convirtieron los datos sin procesar en resultados; puede incluir un cálculo de ejemplo ilustrativo.</li>
-            <li>Observaciones hechas durante el experimento que puedan afectar los resultados, como cambios de temperatura o humedad.</li>
-            <li>Datos que demuestren cómo se cumplieron los objetivos. Por ejemplo, si el objetivo era analizar la velocidad <em>v<sub>y</sub></em> en caída libre, una gráfica de <em>v<sub>y</sub></em> en función del tiempo <em>t</em>.</li>
-            <li>Los conjuntos grandes de datos y cálculos no van aquí: pueden ir en un apéndice o almacenarse electrónicamente, indicando cómo acceder a ellos.</li>
+            <li>Presenta los resultados ya procesados (calculados), en tablas o gráficas. Los datos crudos no van aquí.</li>
+            <li>Explica brevemente cómo pasaste de los datos medidos a los resultados. Puedes mostrar un cálculo de ejemplo.</li>
+            <li>Menciona lo que ocurrió durante el experimento que pudo afectar las mediciones, por ejemplo un cambio de temperatura.</li>
+            <li>Muestra justamente lo que responde a los objetivos. Si el objetivo era estudiar cómo cambia la velocidad con el tiempo, incluye una gráfica de velocidad contra tiempo.</li>
+            <li>Si hay muchísimos datos o cálculos, ponlos en un apéndice.</li>
         </ul>
+        <div class="gp-example gp-good">
+            <span class="gp-example-label">Ejemplo de cómo explicar un cálculo</span>
+            La aceleración de la gravedad se obtuvo a partir de la pendiente de la línea de tendencia de la Figura 1, según la ecuación (1).
+        </div>
         <div data-include="ecuaciones"></div>
         <div data-include="figuras"></div>
         <div data-include="tablas"></div>
@@ -623,69 +751,101 @@
     </template>
 
     <template id="guia-discusion">
-        <div class="gp-meta">
-            <span class="gp-chip">Tiempo verbal: <strong>presente</strong></span>
-            <span class="gp-chip">Redacción: <strong>impersonal</strong></span>
+        <div class="gp-howto">
+            <p class="gp-howto-title">Cómo se escribe</p>
+            <dl>
+                <dt>Tiempo verbal</dt><dd>Presente</dd>
+                <dt>Persona</dt><dd>Impersonal, con "se"</dd>
+            </dl>
+            <p class="gp-howto-ex">Así suena: "El valor obtenido coincide con…", "Esta diferencia puede deberse a…"</p>
         </div>
-        <h4>Al discutir los resultados, considera si</h4>
+        <p>Aquí se explica qué significan los resultados. Responde estas preguntas:</p>
         <ul>
-            <li>Logran lo propuesto en los objetivos, o prueban o refutan la hipótesis planteada.</li>
-            <li>Satisfacen lo que predice la teoría: contrasta los resultados con los principios físicos estudiados.</li>
+            <li>¿Se logró lo que planteaban los objetivos?</li>
+            <li>¿Los resultados coinciden con lo que predice la teoría de la introducción? Compáralos.</li>
+            <li>Si no coinciden, ¿cuáles pueden ser las razones?</li>
         </ul>
-        <h4>Si los resultados no son los esperados</h4>
-        <p>Presenta las posibles razones de las discrepancias con la teoría expuesta en la introducción.</p>
         <h4>Fuentes de error</h4>
-        <ul>
-            <li>Algunos ejemplos: precisión limitada de los instrumentos, ignorar la resistencia del aire, cambios de temperatura o humedad.</li>
-            <li>Siempre que sea posible, cuantifica los errores (aunque sea de forma aproximada) y clasifícalos.</li>
-        </ul>
+        <p>Algunas comunes son la precisión limitada de los instrumentos, no tomar en cuenta la resistencia del aire o los cambios de temperatura y humedad. Cuando se pueda, indica cuánto pudieron afectar los resultados, aunque sea de forma aproximada.</p>
+        <div class="gp-pair">
+            <div class="gp-example gp-bad">
+                <span class="gp-example-label">Evita</span>
+                Hubo errores humanos.
+            </div>
+            <div class="gp-example gp-good">
+                <span class="gp-example-label">Mejor</span>
+                La diferencia puede deberse a la resistencia del aire, que la ecuación (1) no toma en cuenta.
+            </div>
+        </div>
         <div data-include="referir"></div>
         <div data-include="lenguaje"></div>
     </template>
 
     <template id="guia-conclusiones">
-        <div class="gp-meta">
-            <span class="gp-chip">Tiempo verbal: <strong>pasado</strong></span>
-            <span class="gp-chip">Redacción: <strong>impersonal</strong></span>
+        <div class="gp-howto">
+            <p class="gp-howto-title">Cómo se escribe</p>
+            <dl>
+                <dt>Tiempo verbal</dt><dd>Pasado</dd>
+                <dt>Persona</dt><dd>Impersonal, con "se"</dd>
+            </dl>
+            <p class="gp-howto-ex">Así suena: "Se determinó…", "Se comprobó…"</p>
         </div>
-        <p>Son una breve revisión de lo que se dedujo del trabajo realizado.</p>
+        <p>Resume en pocas líneas lo que se aprendió del experimento.</p>
         <ul>
-            <li>Responden si los objetivos se alcanzaron o no.</li>
-            <li>Se fundamentan en lo expuesto en resultados y discusión.</li>
-            <li>No aportan información nueva que no se haya presentado antes.</li>
-            <li>Si otras personas investigadoras hicieron un trabajo similar, se puede comparar con sus resultados, citando ese trabajo.</li>
-            <li>Se escriben en prosa, no como lista.</li>
+            <li>Di si se cumplieron o no los objetivos.</li>
+            <li>Todo lo que concluyas debe estar respaldado por lo que se mostró en resultados y discusión.</li>
+            <li>No agregues información nueva.</li>
+            <li>Si otras personas hicieron un experimento parecido, puedes comparar tus resultados con los suyos, citándolas.</li>
+            <li>Escríbelas como texto corrido, no como lista.</li>
         </ul>
+        <div class="gp-pair">
+            <div class="gp-example gp-bad">
+                <span class="gp-example-label">Evita</span>
+                • Se cumplió el objetivo.<br>• El experimento salió bien.
+            </div>
+            <div class="gp-example gp-good">
+                <span class="gp-example-label">Mejor</span>
+                Se determinó la aceleración de la gravedad con un valor de 9.8 ± 0.2 m/s², que coincide con el valor esperado, por lo que se cumplió el objetivo general.
+            </div>
+        </div>
         <div data-include="lenguaje"></div>
     </template>
 
     <template id="guia-referencias">
+        <p>Es la lista de todos los libros, artículos, sitios web y demás materiales que se citaron en el informe.</p>
         <ul>
-            <li>Incluye todos los libros, artículos, sitios web y demás materiales utilizados en el informe.</li>
-            <li>Existen varias normas (APA, Vancouver, MLA, IEEE, entre otras); cada revista indica cuál usar.</li>
-            <li><strong>En los laboratorios de Física General se utiliza la norma APA (6.ª o 7.ª edición).</strong></li>
-            <li>Los gráficos, diagramas o figuras que no son de elaboración propia deben indicar su fuente.</li>
+            <li><strong>En los laboratorios de Física General se usa la norma APA</strong> (6.ª o 7.ª edición).</li>
+            <li>Si usaste una imagen, diagrama o gráfica que no hiciste tú, su fuente también va en esta lista.</li>
         </ul>
+        <h4>Formato APA para un libro</h4>
+        <div class="gp-example">
+            <span class="gp-example-label">En la lista de referencias</span>
+            Apellido, A. A. y Apellido, B. B. (año). <em>Título del libro</em> (edición). Editorial.
+        </div>
+        <div class="gp-example">
+            <span class="gp-example-label">Dentro del texto</span>
+            …la aceleración es constante (Apellido y Apellido, año).
+        </div>
     </template>
 
     <template id="guia-presentacion">
-        <p>Estas indicaciones aplican a todo el informe. Si se reparten las secciones entre varias personas, conviene revisarlas juntas al final para que el documento quede uniforme.</p>
-        <h4>Tiempos verbales por sección</h4>
+        <p>Estas indicaciones valen para todo el informe. Si se repartieron las secciones entre varias personas, revísenlo juntas al final para que el documento suene como uno solo.</p>
+        <h4>Tiempo verbal de cada sección</h4>
         <table class="gp-table">
-            <thead><tr><th>Sección</th><th>Tiempo</th></tr></thead>
+            <thead><tr><th>Sección</th><th>Tiempo</th><th>Así suena</th></tr></thead>
             <tbody>
-                <tr><td>Resumen</td><td>Pasado</td></tr>
-                <tr><td>Introducción</td><td>Presente</td></tr>
-                <tr><td>Materiales y métodos</td><td>Pasado</td></tr>
-                <tr><td>Resultados</td><td>Pasado</td></tr>
-                <tr><td>Discusión</td><td>Presente</td></tr>
-                <tr><td>Conclusiones</td><td>Pasado</td></tr>
+                <tr><td>Resumen</td><td>Pasado</td><td>Se determinó…</td></tr>
+                <tr><td>Introducción</td><td>Presente</td><td>La velocidad aumenta…</td></tr>
+                <tr><td>Materiales y métodos</td><td>Pasado</td><td>Se midió…</td></tr>
+                <tr><td>Resultados</td><td>Pasado</td><td>Se obtuvo…</td></tr>
+                <tr><td>Discusión</td><td>Presente</td><td>El valor coincide…</td></tr>
+                <tr><td>Conclusiones</td><td>Pasado</td><td>Se comprobó…</td></tr>
             </tbody>
         </table>
         <div data-include="lenguaje"></div>
         <div data-include="referir"></div>
         <h4>Artículos de ejemplo</h4>
-        <p>La guía recomienda tres artículos de la revista <em>Tecnología en Marcha</em> del TEC:</p>
+        <p>La guía recomienda estos artículos de la revista <em>Tecnología en Marcha</em> del TEC como modelos:</p>
         <ul>
             <li><a href="https://revistas.tec.ac.cr/index.php/tec_marcha/article/view/5028/4747" target="_blank" rel="noopener">Implementación en FPGA de un módulo lineal de estimación de parámetros eléctricos para un sistema fotovoltaico</a></li>
             <li><a href="https://revistas.tec.ac.cr/index.php/tec_marcha/article/view/3191/pdf" target="_blank" rel="noopener">Análisis de pintura automotriz mediante espectroscopía Raman para uso forense</a></li>
@@ -694,40 +854,37 @@
     </template>
 
     <!-- =====================================================================
-         BLOQUES COMPARTIDOS (aspectos de presentación de la guía)
+         BLOQUES COMPARTIDOS (aspectos de presentación)
          Se insertan en las secciones mediante <div data-include="nombre">.
          ===================================================================== -->
 
     <template id="bloque-lenguaje">
         <div class="gp-group">
             <h4><i class="fas fa-spell-check" aria-hidden="true"></i> Lenguaje</h4>
-            <ul>
-                <li>Redacta en forma impersonal o en voz pasiva; también se permite la tercera persona. Así el texto se mantiene objetivo y no se parcializa por la opinión de quien investiga.</li>
-                <li>Usa mayúsculas solo para nombres propios, no para conceptos.</li>
-                <li>Evita palabras comodín como "ser", "tener", "hacer", "poner" o "importante".</li>
-                <li>Evita reiteraciones enfáticas.</li>
-            </ul>
-            <div class="gp-example gp-good">
-                <span class="gp-example-label">Forma impersonal</span>
-                "En esta sección se presentan los resultados de…", "En este artículo se desarrollan…"
-            </div>
-            <div class="gp-example gp-bad">
-                <span class="gp-example-label">Evita</span>
-                se vuelve a reiterar
-            </div>
-            <div class="gp-example gp-good">
-                <span class="gp-example-label">Mejor</span>
-                se reitera
-            </div>
-        </div>
-    </template>
 
-    <template id="bloque-mayusculas">
-        <div class="gp-group">
-            <h4><i class="fas fa-spell-check" aria-hidden="true"></i> Lenguaje</h4>
-            <ul>
-                <li>Usa mayúsculas solo para nombres propios, no para conceptos.</li>
-            </ul>
+            <p><strong>Escribe de forma impersonal,</strong> usando "se", en lugar de "yo" o "nosotros". Así el texto se enfoca en el experimento y no en quien lo hizo. También se permite la tercera persona.</p>
+            <div class="gp-pair">
+                <div class="gp-example gp-bad"><span class="gp-example-label">Evita</span>Medimos la velocidad de la esfera.</div>
+                <div class="gp-example gp-good"><span class="gp-example-label">Mejor</span>Se midió la velocidad de la esfera.</div>
+            </div>
+
+            <p><strong>Usa mayúsculas solo en nombres propios,</strong> no en conceptos.</p>
+            <div class="gp-pair">
+                <div class="gp-example gp-bad"><span class="gp-example-label">Evita</span>la Aceleración de la Gravedad</div>
+                <div class="gp-example gp-good"><span class="gp-example-label">Mejor</span>la aceleración de la gravedad; la segunda ley de Newton</div>
+            </div>
+
+            <p><strong>Usa verbos precisos.</strong> Palabras muy generales como "hacer", "tener", "poner", "ser" o "importante" dicen poco; cámbialas por una más exacta.</p>
+            <div class="gp-pair">
+                <div class="gp-example gp-bad"><span class="gp-example-label">Evita</span>Se hizo la medición del tiempo.</div>
+                <div class="gp-example gp-good"><span class="gp-example-label">Mejor</span>Se midió el tiempo.</div>
+            </div>
+
+            <p><strong>No repitas ideas con palabras de más.</strong></p>
+            <div class="gp-pair">
+                <div class="gp-example gp-bad"><span class="gp-example-label">Evita</span>Se vuelve a reiterar que…</div>
+                <div class="gp-example gp-good"><span class="gp-example-label">Mejor</span>Se reitera que…</div>
+            </div>
         </div>
     </template>
 
@@ -735,14 +892,19 @@
         <div class="gp-group">
             <h4><i class="fas fa-square-root-alt" aria-hidden="true"></i> Ecuaciones</h4>
             <ul>
-                <li>Todas las ecuaciones se numeran según su orden de aparición. La numeración permite referirse a ellas; por ejemplo, "según la ecuación (1)…".</li>
-                <li>La primera vez que aparece una ecuación se explica qué representa cada uno de sus términos.</li>
+                <li>Escríbelas con el editor de ecuaciones, en su propio renglón.</li>
+                <li>Numéralas en orden, con el número entre paréntesis a la derecha: (1), (2), (3)…</li>
+                <li>Justo después de cada ecuación, explica qué significa cada símbolo.</li>
+                <li>Para mencionarla más adelante, usa su número: "según la ecuación (1)…".</li>
             </ul>
             <div class="gp-example gp-good">
                 <span class="gp-example-label">Ejemplo</span>
-                El periodo <em>T</em> de oscilación de un péndulo físico se determina con
-                <em>T</em> = 2π √(<em>I</em> / <em>mgd</em>)&nbsp;&nbsp;(1),
-                donde <em>m</em> e <em>I</em> son la masa y el momento de inercia del péndulo, y <em>d</em> es la distancia desde el eje de rotación hasta el centro de masa.
+                <p>La velocidad de un objeto en caída libre cambia con el tiempo según</p>
+                <div class="gp-eq">
+                    <math display="inline"><mi>v</mi><mo>=</mo><msub><mi>v</mi><mn>0</mn></msub><mo>−</mo><mi>g</mi><mi>t</mi><mo>,</mo></math>
+                    <span class="gp-eq-num">(1)</span>
+                </div>
+                <p>donde <math><mi>v</mi></math> es la velocidad, <math><msub><mi>v</mi><mn>0</mn></msub></math> es la velocidad inicial, <math><mi>g</mi></math> es la aceleración de la gravedad y <math><mi>t</mi></math> es el tiempo.</p>
             </div>
         </div>
     </template>
@@ -751,25 +913,26 @@
         <div class="gp-group">
             <h4><i class="fas fa-image" aria-hidden="true"></i> Figuras y tablas</h4>
             <ul>
-                <li>Todas las imágenes, diagramas y gráficos se consideran "Figuras"; cualquier dato tabulado es una "Tabla" (también puede llamarse "Cuadro").</li>
-                <li>Se numeran según su orden de aparición y cada una lleva su título.</li>
-                <li>Las que no son de elaboración propia deben indicar su fuente o referencia.</li>
+                <li>Las imágenes, diagramas y gráficas se llaman <strong>Figura</strong>. Los datos ordenados en filas y columnas se llaman <strong>Tabla</strong> (también se acepta "Cuadro").</li>
+                <li>Se numeran por separado y en orden de aparición: Figura 1, Figura 2…; Tabla 1, Tabla 2…</li>
+                <li>Cada una lleva un título que describe su contenido. En las tablas va arriba; en las figuras, abajo.</li>
+                <li>Si la figura no es tuya, indica de dónde la tomaste.</li>
             </ul>
+            <div class="gp-example gp-good">
+                <span class="gp-example-label">Ejemplo de figura tomada de otra fuente</span>
+                Figura 2. Diagrama del montaje experimental. Tomado de Apellido (año).
+            </div>
             <div data-include="referir"></div>
         </div>
     </template>
 
     <template id="bloque-referir">
         <div class="gp-group">
-            <h4><i class="fas fa-link" aria-hidden="true"></i> Cómo referirse a figuras y tablas</h4>
-            <p>Se mencionan por su número, no por su ubicación en la página.</p>
-            <div class="gp-example gp-bad">
-                <span class="gp-example-label">Evita</span>
-                La variación del periodo <em>T</em> en función de la distancia <em>d</em> se muestra en la figura a continuación.
-            </div>
-            <div class="gp-example gp-good">
-                <span class="gp-example-label">Mejor</span>
-                La variación del periodo <em>T</em> en función de la distancia <em>d</em> se muestra en la Figura 2.
+            <h4><i class="fas fa-link" aria-hidden="true"></i> Cómo mencionar figuras y tablas en el texto</h4>
+            <p>Menciónalas por su número, no por el lugar donde aparecen en la página. Al editar el documento, "abajo" o "a continuación" pueden dejar de ser ciertos; el número, no.</p>
+            <div class="gp-pair">
+                <div class="gp-example gp-bad"><span class="gp-example-label">Evita</span>La velocidad se muestra en la gráfica de abajo.</div>
+                <div class="gp-example gp-good"><span class="gp-example-label">Mejor</span>La velocidad se muestra en la Figura 1.</div>
             </div>
         </div>
     </template>
@@ -778,30 +941,88 @@
         <div class="gp-group">
             <h4><i class="fas fa-table" aria-hidden="true"></i> Tablas</h4>
             <ul>
-                <li>Usan la cantidad correcta de cifras significativas.</li>
-                <li>Las unidades de los valores numéricos quedan claras.</li>
-                <li>Los encabezados de fila y columna se distinguen del resto del contenido.</li>
+                <li>Créalas en el documento, no las pegues como imagen.</li>
+                <li>El número y el título van <strong>arriba</strong> de la tabla. El título explica qué contiene.</li>
+                <li>Cada encabezado dice qué variable es y su unidad entre paréntesis.</li>
+                <li>Los encabezados se distinguen del resto (por ejemplo, con una línea o en negrita).</li>
+                <li>Usa la cantidad correcta de cifras significativas.</li>
             </ul>
+            <div class="gp-example gp-good">
+                <span class="gp-example-label">Ejemplo</span>
+                <p class="gp-caption">Tabla 1. Velocidad de una esfera en caída libre medida en distintos instantes.</p>
+                <table class="gp-demo-table">
+                    <thead><tr><th><em>t</em> (s)</th><th><em>v</em> (m/s)</th></tr></thead>
+                    <tbody>
+                        <tr><td>1.01</td><td>−6.90</td></tr>
+                        <tr><td>1.99</td><td>−17.00</td></tr>
+                        <tr><td>2.98</td><td>−26.35</td></tr>
+                        <tr><td>3.90</td><td>−35.90</td></tr>
+                        <tr><td>5.05</td><td>−47.00</td></tr>
+                        <tr><td>6.00</td><td>−55.79</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="gp-pair">
+                <div class="gp-example gp-bad"><span class="gp-example-label">Evita este título</span>Tabla 1. Datos</div>
+                <div class="gp-example gp-good"><span class="gp-example-label">Mejor</span>Tabla 1. Velocidad de una esfera en caída libre medida en distintos instantes.</div>
+            </div>
         </div>
     </template>
 
     <template id="bloque-graficos">
         <div class="gp-group">
-            <h4><i class="fas fa-chart-line" aria-hidden="true"></i> Gráficos</h4>
+            <h4><i class="fas fa-chart-line" aria-hidden="true"></i> Gráficas</h4>
             <ul>
-                <li>Los ejes tienen etiquetas y unidades apropiadas.</li>
-                <li>La ecuación de mejor ajuste se escribe con los símbolos de las variables graficadas.</li>
+                <li>Una gráfica es una figura: el número y el título van <strong>abajo</strong>, no dentro de la gráfica.</li>
+                <li>Cada eje dice qué variable representa y su unidad, por ejemplo "<em>t</em> (s)".</li>
+                <li>Si agregas la línea de tendencia, muestra su ecuación escrita con las variables de los ejes (ver la nota abajo).</li>
+                <li>Aprovecha el espacio: que los datos ocupen la gráfica, sin grandes zonas vacías.</li>
             </ul>
-            <div class="gp-example gp-bad">
-                <span class="gp-example-label">Evita</span>
-                y = −9.81x + 2.74
-            </div>
             <div class="gp-example gp-good">
-                <span class="gp-example-label">Mejor</span>
-                v = −9.81t + 2.74
+                <span class="gp-example-label">Ejemplo (con los datos de la Tabla 1)</span>
+                <figure class="gp-figure">
+                    <svg viewBox="0 0 360 250" role="img" aria-label="Gráfica de velocidad en función del tiempo con una línea de tendencia descendente">
+                        <g class="gp-plot-grid">
+                            <line x1="50" y1="45.8" x2="340" y2="45.8"/><line x1="50" y1="76.7" x2="340" y2="76.7"/>
+                            <line x1="50" y1="107.5" x2="340" y2="107.5"/><line x1="50" y1="138.3" x2="340" y2="138.3"/>
+                            <line x1="50" y1="169.2" x2="340" y2="169.2"/>
+                        </g>
+                        <g class="gp-plot-axis">
+                            <line x1="50" y1="15" x2="50" y2="200"/><line x1="50" y1="200" x2="340" y2="200"/>
+                        </g>
+                        <g class="gp-plot-ticks" text-anchor="middle">
+                            <text x="94.6" y="214">1</text><text x="139.2" y="214">2</text><text x="183.8" y="214">3</text>
+                            <text x="228.5" y="214">4</text><text x="273.1" y="214">5</text><text x="317.7" y="214">6</text>
+                        </g>
+                        <g class="gp-plot-ticks" text-anchor="end">
+                            <text x="45" y="19">0</text><text x="45" y="49.8">−10</text><text x="45" y="80.7">−20</text>
+                            <text x="45" y="111.5">−30</text><text x="45" y="142.3">−40</text><text x="45" y="173.2">−50</text><text x="45" y="204">−60</text>
+                        </g>
+                        <line class="gp-plot-trend" x1="85.7" y1="30.8" x2="331.1" y2="197.1"/>
+                        <g class="gp-plot-points">
+                            <circle cx="95.1" cy="36.3" r="3.5"/><circle cx="138.8" cy="67.4" r="3.5"/>
+                            <circle cx="183.0" cy="96.3" r="3.5"/><circle cx="224.0" cy="125.7" r="3.5"/>
+                            <circle cx="275.3" cy="159.9" r="3.5"/><circle cx="317.7" cy="187.0" r="3.5"/>
+                        </g>
+                        <g class="gp-plot-eq">
+                            <text x="200" y="42"><tspan font-style="italic">v</tspan> = −9.81<tspan font-style="italic">t</tspan> + 2.74</text>
+                            <text x="200" y="58"><tspan font-style="italic">R</tspan>² = 0.99</text>
+                        </g>
+                        <text class="gp-plot-label" x="195" y="238" text-anchor="middle"><tspan font-style="italic">t</tspan> (s)</text>
+                        <text class="gp-plot-label" x="14" y="107.5" text-anchor="middle" transform="rotate(-90 14 107.5)"><tspan font-style="italic">v</tspan> (m/s)</text>
+                    </svg>
+                    <figcaption class="gp-caption">Figura 1. Velocidad de una esfera en caída libre en función del tiempo.</figcaption>
+                </figure>
+            </div>
+            <h4>Nota sobre la ecuación de la línea de tendencia</h4>
+            <p>Programas como Excel escriben la ecuación de la línea de tendencia siempre con <em>x</em> y <em>y</em>, por ejemplo <em>y</em> = −9.81<em>x</em> + 2.74. En el informe, cambia <em>x</em> y <em>y</em> por las variables reales de tu gráfica. En la Figura 1 el eje horizontal es el tiempo <em>t</em> y el vertical es la velocidad <em>v</em>, así que la ecuación se escribe:</p>
+            <div class="gp-pair">
+                <div class="gp-example gp-bad"><span class="gp-example-label">Evita</span><em>y</em> = −9.81<em>x</em> + 2.74</div>
+                <div class="gp-example gp-good"><span class="gp-example-label">Mejor</span><em>v</em> = −9.81<em>t</em> + 2.74</div>
             </div>
         </div>
     </template>
+
 
     <!-- Cargar jsPDF antes del script principal -->
     <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
