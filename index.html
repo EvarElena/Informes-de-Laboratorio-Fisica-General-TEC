@@ -8,8 +8,19 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <!-- Progreso general fijo y discreto (puedes mover este bloque al final de styles.css) -->
+    <!-- Estilos nuevos (puedes mover este bloque al final de styles.css) -->
     <style>
+        :root {
+            --gp-accent: #2563eb;
+            --gp-accent-soft: rgba(37, 99, 235, 0.08);
+            --gp-text: #1f2937;
+            --gp-muted: #6b7280;
+            --gp-border: rgba(0, 0, 0, 0.1);
+            --gp-width: min(440px, 40vw);
+            --gp-sheet: 58vh;
+        }
+
+        /* ---------- Progreso general fijo y discreto ---------- */
         .overall-progress {
             position: sticky;
             top: 0.5rem;
@@ -28,59 +39,168 @@
             font-size: 0.85rem;
             text-align: left;
         }
-
-        /* Anula estilos grandes anteriores */
         .overall-progress h3,
-        .overall-progress .overall-stats {
-            display: none;
-        }
-
-        .overall-progress .op-label {
-            font-weight: 600;
-            color: #555;
-            white-space: nowrap;
-        }
-
+        .overall-progress .overall-stats { display: none; }
+        .overall-progress .op-label { font-weight: 600; color: #555; white-space: nowrap; }
         .overall-progress .overall-progress-bar {
-            flex: 1;
-            height: 6px;
-            margin: 0;
+            flex: 1; height: 6px; margin: 0;
             background: rgba(0, 0, 0, 0.08);
-            border-radius: 999px;
-            overflow: hidden;
+            border-radius: 999px; overflow: hidden;
         }
-
         .overall-progress .overall-progress-fill {
-            height: 100%;
-            border-radius: 999px;
-            transition: width 0.3s ease;
+            height: 100%; border-radius: 999px; transition: width 0.3s ease;
         }
-
-        .overall-progress .op-count {
-            color: #777;
-            font-variant-numeric: tabular-nums;
-            white-space: nowrap;
-        }
-
+        .overall-progress .op-count { color: #777; font-variant-numeric: tabular-nums; white-space: nowrap; }
         .overall-progress .op-percent {
-            font-weight: 700;
-            color: #222;
-            min-width: 2.8em;
-            text-align: right;
-            font-variant-numeric: tabular-nums;
+            font-weight: 700; color: #222; min-width: 2.8em;
+            text-align: right; font-variant-numeric: tabular-nums;
+        }
+
+        /* ---------- Botón de guía: ahora es un enlace directo al PDF ---------- */
+        a.guide-btn { text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; }
+        #guideModal { display: none !important; } /* ventana antigua desactivada */
+
+        /* ---------- Botón "Ver instrucciones" en cada sección ---------- */
+        .guide-toggle {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            width: 100%;
+            margin: 0.25rem 0 0.9rem;
+            padding: 0.6rem 0.9rem;
+            font: inherit;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-align: left;
+            color: var(--gp-accent);
+            background: var(--gp-accent-soft);
+            border: 1px solid rgba(37, 99, 235, 0.25);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.15s ease, color 0.15s ease;
+        }
+        .guide-toggle:hover { background: rgba(37, 99, 235, 0.14); }
+        .guide-toggle:focus-visible { outline: 2px solid var(--gp-accent); outline-offset: 2px; }
+        .guide-toggle .gt-arrow { margin-left: auto; transition: transform 0.2s ease; }
+        .guide-toggle.is-active { background: var(--gp-accent); color: #fff; border-color: var(--gp-accent); }
+        .guide-toggle.is-active .gt-arrow { transform: rotate(180deg); }
+
+        .checklist-section { scroll-margin-top: 4.5rem; }
+        .checklist-section.guide-active {
+            box-shadow: 0 0 0 2px var(--gp-accent);
+        }
+
+        /* ---------- Panel de instrucciones ---------- */
+        .guide-panel {
+            position: fixed;
+            top: 0; right: 0; bottom: 0;
+            width: var(--gp-width);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+            color: var(--gp-text);
+            border-left: 1px solid var(--gp-border);
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.08);
+            transform: translateX(100%);
+            visibility: hidden;
+            transition: transform 0.25s ease, visibility 0s linear 0.25s;
+            font-size: 0.92rem;
+            line-height: 1.55;
+        }
+        .guide-panel.is-open {
+            transform: none;
+            visibility: visible;
+            transition: transform 0.25s ease;
+        }
+        body { transition: padding 0.25s ease; }
+        body.guide-open { padding-right: var(--gp-width); }
+
+        .gp-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 1rem 1.25rem 0.85rem;
+            border-bottom: 1px solid var(--gp-border);
+        }
+        .gp-header-text { flex: 1; }
+        .gp-kicker { margin: 0; font-size: 0.78rem; color: var(--gp-muted); }
+        .gp-title { margin: 0.1rem 0 0; font-size: 1.1rem; font-weight: 700; outline: none; }
+        .gp-close {
+            flex: none;
+            width: 2.1rem; height: 2.1rem;
+            display: grid; place-items: center;
+            font-size: 1rem; color: var(--gp-muted);
+            background: transparent;
+            border: 1px solid var(--gp-border);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .gp-close:hover { color: var(--gp-text); background: #f3f4f6; }
+        .gp-close:focus-visible { outline: 2px solid var(--gp-accent); outline-offset: 2px; }
+
+        .gp-body { flex: 1; overflow-y: auto; padding: 1rem 1.25rem 1.5rem; }
+        .gp-body h4 { margin: 1.1rem 0 0.35rem; font-size: 0.95rem; font-weight: 600; }
+        .gp-body p { margin: 0 0 0.6rem; }
+        .gp-body ul { margin: 0 0 0.6rem; padding-left: 1.2rem; }
+        .gp-body li { margin-bottom: 0.3rem; }
+
+        .gp-meta { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.9rem; }
+        .gp-chip {
+            display: inline-flex; align-items: center; gap: 0.35rem;
+            padding: 0.3rem 0.65rem;
+            font-size: 0.82rem;
+            background: var(--gp-accent-soft);
+            border-radius: 6px;
+        }
+        .gp-chip strong { color: var(--gp-accent); }
+
+        .gp-example {
+            margin: 0.4rem 0 0.8rem;
+            padding: 0.6rem 0.8rem;
+            background: #f9fafb;
+            border-left: 3px solid var(--gp-border);
+            border-radius: 0 6px 6px 0;
+            font-size: 0.88rem;
+        }
+        .gp-example.gp-bad { border-left-color: #dc2626; }
+        .gp-example.gp-good { border-left-color: #16a34a; }
+        .gp-example-label { display: block; font-size: 0.75rem; font-weight: 600; color: var(--gp-muted); margin-bottom: 0.15rem; }
+
+        .gp-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin: 0.3rem 0 0.8rem; }
+        .gp-table th, .gp-table td { padding: 0.35rem 0.5rem; border-bottom: 1px solid var(--gp-border); text-align: left; }
+        .gp-table th { font-weight: 600; }
+
+        .gp-footer {
+            padding: 0.75rem 1.25rem;
+            border-top: 1px solid var(--gp-border);
+            font-size: 0.85rem;
+        }
+        .gp-footer a { color: var(--gp-accent); font-weight: 500; }
+
+        /* ---------- Celular y tablet: hoja inferior ---------- */
+        @media (max-width: 899px) {
+            .guide-panel {
+                top: auto; left: 0; right: 0; bottom: 0;
+                width: auto;
+                height: var(--gp-sheet);
+                border-left: none;
+                border-top: 1px solid var(--gp-border);
+                border-radius: 16px 16px 0 0;
+                box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.12);
+                transform: translateY(100%);
+            }
+            body.guide-open { padding-right: 0; padding-bottom: var(--gp-sheet); }
         }
 
         @media (max-width: 480px) {
-            .overall-progress {
-                gap: 0.5rem;
-                padding: 0.4rem 0.75rem;
-                font-size: 0.78rem;
-            }
+            .overall-progress { gap: 0.5rem; padding: 0.4rem 0.75rem; font-size: 0.78rem; }
             .overall-progress .op-label { display: none; }
         }
 
         @media (prefers-reduced-motion: reduce) {
-            .overall-progress .overall-progress-fill { transition: none; }
+            .overall-progress .overall-progress-fill,
+            .guide-panel, body, .guide-toggle .gt-arrow { transition: none; }
         }
     </style>
 </head>
@@ -98,23 +218,14 @@
             </div>
         </header>
 
-        <!-- Botón para consultar guía ---------- -->
+        <!-- Botón que abre la guía directamente -->
         <section class="guide-section">
-            <button id="guideButton" class="guide-btn" title="Abrir guía en PDF">
+            <a id="guideButton" class="guide-btn" href="Guia_para_elaborar_informes.pdf" target="_blank" rel="noopener">
                 <i class="fas fa-book" aria-hidden="true"></i>
                 Consultar Guía para Elaborar Informes
-            </button>
-            <div id="guideModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="guideTitle">
-                <div class="modal-content">
-                    <span class="close" role="button" aria-label="Cerrar">&times;</span>
-                    <h2 id="guideTitle">Guia para Elaborar Informes</h2>
-                    <p>Para consultar la guía completa, descarga el documento PDF:</p>
-                    <a href="Guia_para_elaborar_informes.pdf" target="_blank" class="download-link">
-                        <i class="fas fa-download" aria-hidden="true"></i>
-                        Descargar Guía (PDF)
-                    </a>
-                </div>
-            </div>
+            </a>
+            <!-- Ventana antigua: se deja vacía y oculta solo para que script.js no falle si la busca -->
+            <div id="guideModal" class="modal" aria-hidden="true"><div class="modal-content"><span class="close"></span></div></div>
         </section>
 
         <!-- Lista principal -->
@@ -145,26 +256,10 @@
                     </div>
                 </div>
                 <div class="checklist-items">
-                    <label class="checklist-item">
-                        <input type="checkbox" data-item="titulo-1">
-                        <span class="checkmark"></span>
-                        <span class="item-text">Representa correctamente el contenido y anticipa el tema principal</span>
-                    </label>
-                    <label class="checklist-item">
-                        <input type="checkbox" data-item="titulo-2">
-                        <span class="checkmark"></span>
-                        <span class="item-text">No es genérico ni incluye "Informe" o "Laboratorio"</span>
-                    </label>
-                    <label class="checklist-item">
-                        <input type="checkbox" data-item="titulo-3">
-                        <span class="checkmark"></span>
-                        <span class="item-text">Es un título que podría usarse en una publicación científica</span>
-                    </label>
-                    <label class="checklist-item">
-                        <input type="checkbox" data-item="titulo-4">
-                        <span class="checkmark"></span>
-                        <span class="item-text">Es claro, conciso y predictivo del contenido</span>
-                    </label>
+                    <label class="checklist-item"><input type="checkbox" data-item="titulo-1"><span class="checkmark"></span><span class="item-text">Representa correctamente el contenido y anticipa el tema principal</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="titulo-2"><span class="checkmark"></span><span class="item-text">No es genérico ni incluye "Informe" o "Laboratorio"</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="titulo-3"><span class="checkmark"></span><span class="item-text">Es un título que podría usarse en una publicación científica</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="titulo-4"><span class="checkmark"></span><span class="item-text">Es claro, conciso y predictivo del contenido</span></label>
                 </div>
             </section>
 
@@ -178,21 +273,9 @@
                     </div>
                 </div>
                 <div class="checklist-items">
-                    <label class="checklist-item">
-                        <input type="checkbox" data-item="autoria-1">
-                        <span class="checkmark"></span>
-                        <span class="item-text">Se incluyen los nombres completos de todas las personas autoras</span>
-                    </label>
-                    <label class="checklist-item">
-                        <input type="checkbox" data-item="autoria-2">
-                        <span class="checkmark"></span>
-                        <span class="item-text">Cada nombre tiene dos superíndices: escuela a la que pertenece y correo electrónico institucional</span>
-                    </label>
-                    <label class="checklist-item">
-                        <input type="checkbox" data-item="autoria-3">
-                        <span class="checkmark"></span>
-                        <span class="item-text">Se mantiene el mismo formato tipográfico para todas las personas autoras</span>
-                    </label>
+                    <label class="checklist-item"><input type="checkbox" data-item="autoria-1"><span class="checkmark"></span><span class="item-text">Se incluyen los nombres completos de todas las personas autoras</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="autoria-2"><span class="checkmark"></span><span class="item-text">Cada nombre tiene dos superíndices: escuela a la que pertenece y correo electrónico institucional</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="autoria-3"><span class="checkmark"></span><span class="item-text">Se mantiene el mismo formato tipográfico para todas las personas autoras</span></label>
                 </div>
             </section>
 
@@ -206,36 +289,12 @@
                     </div>
                 </div>
                 <div class="checklist-items">
-                    <label class="checklist-item">
-                        <input type="checkbox" data-item="resumen-1">
-                        <span class="checkmark"></span>
-                        <span class="item-text">Se redactó al finalizar el informe (100–250 palabras)</span>
-                    </label>
-                    <label class="checklist-item">
-                        <input type="checkbox" data-item="resumen-2">
-                        <span class="checkmark"></span>
-                        <span class="item-text">Resume de forma coherente el contenido siguiendo: objetivo → método → resultados → conclusiones</span>
-                    </label>
-                    <label class="checklist-item">
-                        <input type="checkbox" data-item="resumen-3">
-                        <span class="checkmark"></span>
-                        <span class="item-text">Integra lo realizado, los principales resultados y los aspectos analizados</span>
-                    </label>
-                    <label class="checklist-item">
-                        <input type="checkbox" data-item="resumen-4">
-                        <span class="checkmark"></span>
-                        <span class="item-text">No incluye tablas, figuras, ecuaciones, abreviaturas ni citas</span>
-                    </label>
-                    <label class="checklist-item">
-                        <input type="checkbox" data-item="resumen-5">
-                        <span class="checkmark"></span>
-                        <span class="item-text">Se entiende sin leer el resto del documento (autónomo)</span>
-                    </label>
-                    <label class="checklist-item">
-                        <input type="checkbox" data-item="resumen-6">
-                        <span class="checkmark"></span>
-                        <span class="item-text">Redactado en pasado y en forma impersonal (por ejemplo: "Se determinó…")</span>
-                    </label>
+                    <label class="checklist-item"><input type="checkbox" data-item="resumen-1"><span class="checkmark"></span><span class="item-text">Se redactó al finalizar el informe (100–250 palabras)</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="resumen-2"><span class="checkmark"></span><span class="item-text">Resume de forma coherente el contenido siguiendo: objetivo → método → resultados → conclusiones</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="resumen-3"><span class="checkmark"></span><span class="item-text">Integra lo realizado, los principales resultados y los aspectos analizados</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="resumen-4"><span class="checkmark"></span><span class="item-text">No incluye tablas, figuras, ecuaciones, abreviaturas ni citas</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="resumen-5"><span class="checkmark"></span><span class="item-text">Se entiende sin leer el resto del documento (autónomo)</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="resumen-6"><span class="checkmark"></span><span class="item-text">Redactado en pasado y en forma impersonal (por ejemplo: "Se determinó…")</span></label>
                 </div>
             </section>
 
@@ -249,36 +308,12 @@
                     </div>
                 </div>
                 <div class="checklist-items">
-                    <label class="checklist-item">
-                        <input type="checkbox" data-item="palabras-1">
-                        <span class="checkmark"></span>
-                        <span class="item-text">Se incluyen entre tres y seis palabras clave</span>
-                    </label>
-                    <label class="checklist-item">
-                        <input type="checkbox" data-item="palabras-2">
-                        <span class="checkmark"></span>
-                        <span class="item-text">Ubicadas inmediatamente después del resumen</span>
-                    </label>
-                    <label class="checklist-item">
-                        <input type="checkbox" data-item="palabras-3">
-                        <span class="checkmark"></span>
-                        <span class="item-text">Caracterizan el contenido (conceptos, variables o fenómenos relevantes)</span>
-                    </label>
-                    <label class="checklist-item">
-                        <input type="checkbox" data-item="palabras-4">
-                        <span class="checkmark"></span>
-                        <span class="item-text">No son términos genéricos (evitar: laboratorio, informe, física general)</span>
-                    </label>
-                    <label class="checklist-item">
-                        <input type="checkbox" data-item="palabras-5">
-                        <span class="checkmark"></span>
-                        <span class="item-text">No repiten palabras del título salvo que sea indispensable</span>
-                    </label>
-                    <label class="checklist-item">
-                        <input type="checkbox" data-item="palabras-6">
-                        <span class="checkmark"></span>
-                        <span class="item-text">Se escriben en minúscula, separadas por comas y sin punto final</span>
-                    </label>
+                    <label class="checklist-item"><input type="checkbox" data-item="palabras-1"><span class="checkmark"></span><span class="item-text">Se incluyen entre tres y seis palabras clave</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="palabras-2"><span class="checkmark"></span><span class="item-text">Ubicadas inmediatamente después del resumen</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="palabras-3"><span class="checkmark"></span><span class="item-text">Caracterizan el contenido (conceptos, variables o fenómenos relevantes)</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="palabras-4"><span class="checkmark"></span><span class="item-text">No son términos genéricos (evitar: laboratorio, informe, física general)</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="palabras-5"><span class="checkmark"></span><span class="item-text">No repiten palabras del título salvo que sea indispensable</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="palabras-6"><span class="checkmark"></span><span class="item-text">Se escriben en minúscula, separadas por comas y sin punto final</span></label>
                 </div>
             </section>
 
@@ -444,15 +479,349 @@
         </div>
     </div>
 
+    <!-- =====================================================================
+         PANEL DE INSTRUCCIONES
+         ===================================================================== -->
+    <aside id="guidePanel" class="guide-panel" aria-labelledby="guidePanelTitle">
+        <div class="gp-header">
+            <div class="gp-header-text">
+                <p class="gp-kicker">Según la Guía para Elaborar Informes</p>
+                <h2 id="guidePanelTitle" class="gp-title" tabindex="-1"></h2>
+            </div>
+            <button type="button" id="guidePanelClose" class="gp-close" aria-label="Cerrar instrucciones">
+                <i class="fas fa-times" aria-hidden="true"></i>
+            </button>
+        </div>
+        <div id="guidePanelBody" class="gp-body"></div>
+        <div class="gp-footer">
+            <a href="Guia_para_elaborar_informes.pdf" target="_blank" rel="noopener">
+                <i class="fas fa-file-pdf" aria-hidden="true"></i> Abrir la guía completa (PDF)
+            </a>
+        </div>
+    </aside>
+
+    <!-- =====================================================================
+         CONTENIDO DE LAS INSTRUCCIONES POR SECCIÓN
+         Cada <template id="guia-X"> corresponde a data-section="X".
+         Para editar el texto, cámbialo aquí; no hace falta tocar el script.
+         ===================================================================== -->
+
+    <template id="guia-titulo">
+        <p>El título debe describir o predecir el contenido del informe en forma clara y concisa.</p>
+    </template>
+
+    <template id="guia-autoria">
+        <h4>Qué incluir</h4>
+        <ul>
+            <li>Los nombres de todas las personas autoras.</li>
+            <li>La afiliación institucional, usando el nombre completo de la institución.</li>
+            <li>El correo electrónico.</li>
+        </ul>
+        <p>El encabezado de la propia guía sirve como ejemplo de formato.</p>
+    </template>
+
+    <template id="guia-resumen">
+        <div class="gp-meta">
+            <span class="gp-chip">Tiempo verbal: <strong>pasado</strong></span>
+            <span class="gp-chip">Redacción: <strong>impersonal</strong></span>
+            <span class="gp-chip">Extensión: <strong>100–250 palabras</strong></span>
+        </div>
+        <p>Es la primera impresión que la persona lectora tendrá del trabajo realizado y de los resultados obtenidos. Es un solo párrafo breve.</p>
+        <h4>Debe sintetizar</h4>
+        <ul>
+            <li>El objetivo del experimento.</li>
+            <li>Los métodos utilizados.</li>
+            <li>Los resultados más importantes.</li>
+            <li>Alguna observación importante.</li>
+            <li>Las conclusiones.</li>
+        </ul>
+        <h4>No debe</h4>
+        <ul>
+            <li>Hacer referencia a datos, cálculos, tablas, figuras u otras partes del informe.</li>
+            <li>Incluir abreviaturas, acrónimos ni jerga.</li>
+        </ul>
+        <h4>Además</h4>
+        <ul>
+            <li>Sigue el mismo orden que la estructura del informe.</li>
+            <li>Es autónomo: se entiende sin consultar ningún otro documento.</li>
+            <li>Se recomienda redactarlo al terminar todo el informe.</li>
+        </ul>
+    </template>
+
+    <template id="guia-palabras-clave">
+        <p>Son palabras que describen los elementos más relevantes del informe.</p>
+        <div class="gp-example">
+            <span class="gp-example-label">Ejemplo de formato (tomado de la guía)</span>
+            Palabras clave: escritura científica, artículo científico, laboratorio de física básica
+        </div>
+    </template>
+
+    <template id="guia-introduccion">
+        <div class="gp-meta">
+            <span class="gp-chip">Tiempo verbal: <strong>presente</strong></span>
+            <span class="gp-chip">Redacción: <strong>impersonal</strong></span>
+        </div>
+        <p>Prepara a la persona lectora para las siguientes partes del informe.</p>
+        <h4>Bases de la teoría</h4>
+        <ul>
+            <li>Menciona solo la teoría relevante para el experimento.</li>
+            <li>Cita siempre las fuentes de donde se toma la información.</li>
+            <li>Puedes usar ecuaciones, diagramas o imágenes para aclarar conceptos; cada uno se numera por orden de aparición.</li>
+            <li>No es necesario derivar ecuaciones ni describir la teoría exhaustivamente. Si una deducción es muy larga, va en un apéndice.</li>
+            <li>Los diagramas o gráficos que no son de elaboración propia llevan su fuente.</li>
+        </ul>
+        <h4>Ecuaciones</h4>
+        <ul>
+            <li>Se numeran según su orden de aparición, para poder referirse a ellas.</li>
+            <li>La primera vez que aparece una ecuación se explica qué representa cada término.</li>
+        </ul>
+        <div class="gp-example gp-good">
+            <span class="gp-example-label">Ejemplo</span>
+            El periodo <em>T</em> de oscilación de un péndulo físico se determina con
+            <em>T</em> = 2π √(<em>I</em> / <em>mgd</em>)&nbsp;&nbsp;(1),
+            donde <em>m</em> e <em>I</em> son la masa y el momento de inercia del péndulo, y <em>d</em> es la distancia desde el eje de rotación hasta el centro de masa.
+        </div>
+        <h4>Objetivos</h4>
+        <p>Se exponen de forma clara y precisa el objetivo principal y los objetivos específicos del experimento.</p>
+    </template>
+
+    <template id="guia-materiales-metodos">
+        <div class="gp-meta">
+            <span class="gp-chip">Tiempo verbal: <strong>pasado</strong></span>
+            <span class="gp-chip">Redacción: <strong>impersonal</strong></span>
+        </div>
+        <p>Responde la pregunta <strong>¿cómo se hizo?</strong></p>
+        <ul>
+            <li>Es una descripción cronológica y detallada de los pasos seguidos y del equipo utilizado.</li>
+            <li>Se escribe en prosa, no como una lista de instrucciones.</li>
+            <li>Indica qué variables se registraron, qué observaciones se hicieron y qué instrumentos se usaron.</li>
+            <li>De los instrumentos se incluyen detalles técnicos como marca y modelo.</li>
+        </ul>
+        <p>Debe permitir que otra persona profesional del área valide los resultados al repetir el procedimiento.</p>
+    </template>
+
+    <template id="guia-resultados">
+        <div class="gp-meta">
+            <span class="gp-chip">Tiempo verbal: <strong>pasado</strong></span>
+            <span class="gp-chip">Redacción: <strong>impersonal</strong></span>
+        </div>
+        <h4>Qué presentar</h4>
+        <ul>
+            <li>Los resultados ya procesados, en tablas o gráficos, descritos de forma imparcial (sin primera persona).</li>
+            <li>Una breve descripción de cómo se convirtieron los datos sin procesar en resultados; puede incluir un cálculo de ejemplo ilustrativo.</li>
+            <li>Observaciones hechas durante el experimento que puedan afectar los resultados, como cambios de temperatura o humedad.</li>
+            <li>Datos que demuestren cómo se cumplieron los objetivos. Por ejemplo, si el objetivo era analizar la velocidad <em>v<sub>y</sub></em> en caída libre, una gráfica de <em>v<sub>y</sub></em> en función del tiempo <em>t</em>.</li>
+            <li>Los conjuntos grandes de datos y cálculos no van aquí: pueden ir en un apéndice o almacenarse electrónicamente, indicando cómo acceder a ellos.</li>
+        </ul>
+        <h4>Tablas</h4>
+        <ul>
+            <li>Se numeran según su orden de aparición y cada una lleva su título. También puede usarse la palabra "Cuadro".</li>
+            <li>Usan la cantidad correcta de cifras significativas.</li>
+            <li>Las unidades de los valores numéricos quedan claras.</li>
+            <li>Los encabezados de fila y columna se distinguen del resto del contenido.</li>
+        </ul>
+        <h4>Gráficos</h4>
+        <ul>
+            <li>Todas las imágenes, diagramas y gráficos se consideran "Figuras" y se numeran en orden.</li>
+            <li>Los ejes tienen etiquetas y unidades apropiadas.</li>
+            <li>La ecuación de mejor ajuste se escribe con los símbolos de las variables graficadas.</li>
+            <li>Los gráficos que no son de elaboración propia llevan su fuente.</li>
+        </ul>
+        <div class="gp-example gp-bad">
+            <span class="gp-example-label">Evita</span>
+            y = −9.81x + 2.74
+        </div>
+        <div class="gp-example gp-good">
+            <span class="gp-example-label">Mejor</span>
+            v = −9.81t + 2.74
+        </div>
+        <h4>Cómo referirse a tablas y figuras</h4>
+        <p>Se mencionan por su número, no por su ubicación en la página.</p>
+        <div class="gp-example gp-bad">
+            <span class="gp-example-label">Evita</span>
+            …se muestra en la figura a continuación.
+        </div>
+        <div class="gp-example gp-good">
+            <span class="gp-example-label">Mejor</span>
+            …se muestra en la Figura 2.
+        </div>
+    </template>
+
+    <template id="guia-discusion">
+        <div class="gp-meta">
+            <span class="gp-chip">Tiempo verbal: <strong>presente</strong></span>
+            <span class="gp-chip">Redacción: <strong>impersonal</strong></span>
+        </div>
+        <h4>Al discutir los resultados, considera si</h4>
+        <ul>
+            <li>Logran lo propuesto en los objetivos, o prueban o refutan la hipótesis planteada.</li>
+            <li>Satisfacen lo que predice la teoría: contrasta los resultados con los principios físicos estudiados.</li>
+        </ul>
+        <h4>Si los resultados no son los esperados</h4>
+        <p>Presenta las posibles razones de las discrepancias con la teoría expuesta en la introducción.</p>
+        <h4>Fuentes de error</h4>
+        <ul>
+            <li>Algunos ejemplos: precisión limitada de los instrumentos, ignorar la resistencia del aire, cambios de temperatura o humedad.</li>
+            <li>Siempre que sea posible, cuantifica los errores (aunque sea de forma aproximada) y clasifícalos.</li>
+        </ul>
+    </template>
+
+    <template id="guia-conclusiones">
+        <div class="gp-meta">
+            <span class="gp-chip">Tiempo verbal: <strong>pasado</strong></span>
+            <span class="gp-chip">Redacción: <strong>impersonal</strong></span>
+        </div>
+        <p>Son una breve revisión de lo que se dedujo del trabajo realizado.</p>
+        <ul>
+            <li>Responden si los objetivos se alcanzaron o no.</li>
+            <li>Se fundamentan en lo expuesto en resultados y discusión.</li>
+            <li>No aportan información nueva que no se haya presentado antes.</li>
+            <li>Si otras personas investigadoras hicieron un trabajo similar, se puede comparar con sus resultados, citando ese trabajo.</li>
+            <li>Se escriben en prosa, no como lista.</li>
+        </ul>
+    </template>
+
+    <template id="guia-referencias">
+        <ul>
+            <li>Incluye todos los libros, artículos, sitios web y demás materiales utilizados en el informe.</li>
+            <li>Existen varias normas (APA, Vancouver, MLA, IEEE, entre otras); cada revista indica cuál usar.</li>
+            <li><strong>En los laboratorios de Física General se utiliza la norma APA (6.ª o 7.ª edición).</strong></li>
+            <li>Los gráficos, diagramas o figuras que no son de elaboración propia deben indicar su fuente.</li>
+        </ul>
+    </template>
+
+    <template id="guia-presentacion">
+        <h4>Tiempos verbales por sección</h4>
+        <table class="gp-table">
+            <thead><tr><th>Sección</th><th>Tiempo</th></tr></thead>
+            <tbody>
+                <tr><td>Resumen</td><td>Pasado</td></tr>
+                <tr><td>Introducción</td><td>Presente</td></tr>
+                <tr><td>Materiales y métodos</td><td>Pasado</td></tr>
+                <tr><td>Resultados</td><td>Pasado</td></tr>
+                <tr><td>Discusión</td><td>Presente</td></tr>
+                <tr><td>Conclusiones</td><td>Pasado</td></tr>
+            </tbody>
+        </table>
+        <h4>Persona gramatical</h4>
+        <p>Se recomienda la forma impersonal o la voz pasiva; también se permite la tercera persona. Así la redacción se mantiene objetiva y no se parcializa por la opinión de quien investiga.</p>
+        <div class="gp-example gp-good">
+            <span class="gp-example-label">Ejemplos</span>
+            "En esta sección se presentan los resultados de…", "En este artículo se desarrollan…"
+        </div>
+        <h4>Recomendaciones de lenguaje</h4>
+        <ul>
+            <li>Usa mayúsculas solo para nombres propios, no para conceptos.</li>
+            <li>Evita palabras comodín como "ser", "tener", "hacer", "poner" o "importante".</li>
+            <li>Evita reiteraciones enfáticas.</li>
+        </ul>
+        <div class="gp-example gp-bad">
+            <span class="gp-example-label">Evita</span>
+            se vuelve a reiterar
+        </div>
+        <div class="gp-example gp-good">
+            <span class="gp-example-label">Mejor</span>
+            se reitera
+        </div>
+        <h4>Artículos de ejemplo</h4>
+        <p>La guía recomienda tres artículos de la revista <em>Tecnología en Marcha</em> del TEC:</p>
+        <ul>
+            <li><a href="https://revistas.tec.ac.cr/index.php/tec_marcha/article/view/5028/4747" target="_blank" rel="noopener">Implementación en FPGA de un módulo lineal de estimación de parámetros eléctricos para un sistema fotovoltaico</a></li>
+            <li><a href="https://revistas.tec.ac.cr/index.php/tec_marcha/article/view/3191/pdf" target="_blank" rel="noopener">Análisis de pintura automotriz mediante espectroscopía Raman para uso forense</a></li>
+            <li><a href="https://revistas.tec.ac.cr/index.php/tec_marcha/article/view/4482/4078" target="_blank" rel="noopener">Desarrollo de un sistema automatizado de escaneo por radiación gamma</a></li>
+        </ul>
+    </template>
+
     <!-- Cargar jsPDF antes del script principal -->
     <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 
     <!-- Tu script -->
     <script src="script.js" defer></script>
 
+    <!-- Panel de instrucciones (independiente de script.js) -->
+    <script>
+    (function () {
+        const panel = document.getElementById('guidePanel');
+        const title = document.getElementById('guidePanelTitle');
+        const body = document.getElementById('guidePanelBody');
+        const closeBtn = document.getElementById('guidePanelClose');
+        const narrow = window.matchMedia('(max-width: 899px)');
+        const LABEL_OPEN = 'Ver instrucciones de la guía';
+        const LABEL_CLOSE = 'Ocultar instrucciones';
+        let activeBtn = null;
+        let activeSection = null;
+
+        document.querySelectorAll('.checklist-section').forEach(function (section) {
+            const tpl = document.getElementById('guia-' + section.dataset.section);
+            const header = section.querySelector('.section-header');
+            if (!tpl || !header) return;
+
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'guide-toggle';
+            btn.setAttribute('aria-controls', 'guidePanel');
+            btn.setAttribute('aria-expanded', 'false');
+            btn.innerHTML =
+                '<i class="fas fa-book-open" aria-hidden="true"></i>' +
+                '<span class="gt-label">' + LABEL_OPEN + '</span>' +
+                '<i class="fas fa-chevron-right gt-arrow" aria-hidden="true"></i>';
+            header.insertAdjacentElement('afterend', btn);
+
+            btn.addEventListener('click', function () {
+                if (activeBtn === btn) { closePanel(); } else { openPanel(section, btn, tpl); }
+            });
+        });
+
+        function setButton(btn, active) {
+            btn.classList.toggle('is-active', active);
+            btn.setAttribute('aria-expanded', String(active));
+            btn.querySelector('.gt-label').textContent = active ? LABEL_CLOSE : LABEL_OPEN;
+        }
+
+        function openPanel(section, btn, tpl) {
+            if (activeBtn) {
+                setButton(activeBtn, false);
+                activeSection.classList.remove('guide-active');
+            }
+            const h3 = section.querySelector('.section-header h3');
+            title.textContent = h3 ? h3.textContent.trim() : '';
+            body.replaceChildren(tpl.content.cloneNode(true));
+            body.scrollTop = 0;
+
+            panel.classList.add('is-open');
+            document.body.classList.add('guide-open');
+            setButton(btn, true);
+            section.classList.add('guide-active');
+            activeBtn = btn;
+            activeSection = section;
+
+            if (narrow.matches) {
+                section.scrollIntoView({ block: 'start', behavior: 'smooth' });
+            }
+            title.focus({ preventScroll: true });
+        }
+
+        function closePanel() {
+            if (!activeBtn) return;
+            panel.classList.remove('is-open');
+            document.body.classList.remove('guide-open');
+            setButton(activeBtn, false);
+            activeSection.classList.remove('guide-active');
+            activeBtn.focus({ preventScroll: true });
+            activeBtn = null;
+            activeSection = null;
+        }
+
+        closeBtn.addEventListener('click', closePanel);
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') closePanel();
+        });
+    })();
+    </script>
+
     <!-- Licencia -->
     <footer style="font-size: 13px; text-align: center; margin-top: 20px; color: #444;">
-        <a href="https://evarelena.github.io/Informes-de-Laboratorio-Fisica-General-TEC/">Lista de Chequeo para Informes de Laboratorio de la Escuela de Física del TEC</a> © 2026
+        <a href="https://evarelena.github.io/Informes-de-Laboratorio-Fisica-General-TEC/">Lista de Chequeo para Informes de Laboratorio de la Escuela de Física del TEC</a> © 2025
         by <a href="https://creativecommons.org" target="_blank">Évar Elena Sevilla Quesada</a>
         is licensed under
         <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a>
