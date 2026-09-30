@@ -7,6 +7,82 @@
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- Progreso general fijo y discreto (puedes mover este bloque al final de styles.css) -->
+    <style>
+        .overall-progress {
+            position: sticky;
+            top: 0.5rem;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.5rem 1rem;
+            margin: 0 0 1.25rem;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 999px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+            font-size: 0.85rem;
+            text-align: left;
+        }
+
+        /* Anula estilos grandes anteriores */
+        .overall-progress h3,
+        .overall-progress .overall-stats {
+            display: none;
+        }
+
+        .overall-progress .op-label {
+            font-weight: 600;
+            color: #555;
+            white-space: nowrap;
+        }
+
+        .overall-progress .overall-progress-bar {
+            flex: 1;
+            height: 6px;
+            margin: 0;
+            background: rgba(0, 0, 0, 0.08);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .overall-progress .overall-progress-fill {
+            height: 100%;
+            border-radius: 999px;
+            transition: width 0.3s ease;
+        }
+
+        .overall-progress .op-count {
+            color: #777;
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+        }
+
+        .overall-progress .op-percent {
+            font-weight: 700;
+            color: #222;
+            min-width: 2.8em;
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+        }
+
+        @media (max-width: 480px) {
+            .overall-progress {
+                gap: 0.5rem;
+                padding: 0.4rem 0.75rem;
+                font-size: 0.78rem;
+            }
+            .overall-progress .op-label { display: none; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .overall-progress .overall-progress-fill { transition: none; }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -45,26 +121,19 @@
         <main class="checklist-container">
             <h2>Lista de Chequeo por Secciones</h2>
 
-                <!-- Resumen general -->
-            <section class="overall-progress">
-                <h3>Progreso General</h3>
-                <div class="overall-stats">
-                    <div class="stat-item">
-                        <span class="stat-number" id="totalCompleted">0</span>
-                        <span class="stat-label">Elementos completados</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" id="totalItems">74</span>
-                        <span class="stat-label">Total de elementos</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" id="completionPercentage">0%</span>
-                        <span class="stat-label">Porcentaje completado</span>
-                    </div>
+            <!-- Progreso general (fijo y compacto) -->
+            <section class="overall-progress" aria-label="Progreso general">
+                <span class="op-label">
+                    <i class="fas fa-tasks" aria-hidden="true"></i> Progreso
+                </span>
+                <div class="overall-progress-bar">
+                    <div class="overall-progress-fill" id="overallProgressFill" style="width: 0%"></div>
                 </div>
-                <div class="overall-progress-bar"><div class="overall-progress-fill" id="overallProgressFill" style="width: 0%"></div></div>
+                <span class="op-count">
+                    <span id="totalCompleted">0</span>/<span id="totalItems">74</span>
+                </span>
+                <span class="op-percent" id="completionPercentage">0%</span>
             </section>
-        </main>
 
             <!-- 1. Título (4) -->
             <section class="checklist-section" data-section="titulo">
@@ -235,34 +304,33 @@
                 </div>
             </section>
 
-            <!-- 6. Materiales y métodos (9) -->
+            <!-- 6. Materiales y métodos (8) -->
             <section class="checklist-section" data-section="materiales-metodos">
                 <div class="section-header">
                     <h3><i class="fas fa-cogs"></i> 6. Materiales y métodos</h3>
                     <div class="section-progress">
-                        <span class="progress-text">0/9</span>
+                        <span class="progress-text">0/8</span>
                         <div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div>
                     </div>
                 </div>
                 <div class="checklist-items">
-  <label class="checklist-item"><input type="checkbox" data-item="metodos-1"><span class="checkmark"></span><span class="item-text">Describe cómo se realizó el experimento en orden lógico y cronológico</span></label>
-  <label class="checklist-item"><input type="checkbox" data-item="metodos-2"><span class="checkmark"></span><span class="item-text">Redactada en prosa continua, no como lista de pasos</span></label>
-  <label class="checklist-item"><input type="checkbox" data-item="metodos-3"><span class="checkmark"></span><span class="item-text">Incluye equipos, instrumentos y materiales; con marca y modelo si están disponibles</span></label>
-  <label class="checklist-item"><input type="checkbox" data-item="metodos-4"><span class="checkmark"></span><span class="item-text">Indica qué variables se midieron y qué procedimiento se siguió</span></label>
-  <label class="checklist-item"><input type="checkbox" data-item="metodos-5"><span class="checkmark"></span><span class="item-text">Explica cómo se registraron las mediciones y condiciones relevantes</span></label>
-  <label class="checklist-item"><input type="checkbox" data-item="metodos-6"><span class="checkmark"></span><span class="item-text">Permite que otra persona profesional repita el experimento y valide resultados</span></label>
-  <label class="checklist-item"><input type="checkbox" data-item="metodos-8"><span class="checkmark"></span><span class="item-text">No se incluyen resultados, conclusiones ni interpretaciones</span></label>
-  <label class="checklist-item"><input type="checkbox" data-item="metodos-9"><span class="checkmark"></span><span class="item-text">Se redacta en tiempo pasado y de forma impersonal</span></label>
-</div>
-
+                    <label class="checklist-item"><input type="checkbox" data-item="metodos-1"><span class="checkmark"></span><span class="item-text">Describe cómo se realizó el experimento en orden lógico y cronológico</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="metodos-2"><span class="checkmark"></span><span class="item-text">Redactada en prosa continua, no como lista de pasos</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="metodos-3"><span class="checkmark"></span><span class="item-text">Incluye equipos, instrumentos y materiales; con marca y modelo si están disponibles</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="metodos-4"><span class="checkmark"></span><span class="item-text">Indica qué variables se midieron y qué procedimiento se siguió</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="metodos-5"><span class="checkmark"></span><span class="item-text">Explica cómo se registraron las mediciones y condiciones relevantes</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="metodos-6"><span class="checkmark"></span><span class="item-text">Permite que otra persona profesional repita el experimento y valide resultados</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="metodos-8"><span class="checkmark"></span><span class="item-text">No se incluyen resultados, conclusiones ni interpretaciones</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="metodos-9"><span class="checkmark"></span><span class="item-text">Se redacta en tiempo pasado y de forma impersonal</span></label>
+                </div>
             </section>
 
-            <!-- 7. Resultados (13) -->
+            <!-- 7. Resultados (14) -->
             <section class="checklist-section" data-section="resultados">
                 <div class="section-header">
                     <h3><i class="fas fa-chart-line"></i> 7. Resultados</h3>
                     <div class="section-progress">
-                        <span class="progress-text">0/13</span>
+                        <span class="progress-text">0/14</span>
                         <div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div>
                     </div>
                 </div>
@@ -272,7 +340,7 @@
                     <label class="checklist-item"><input type="checkbox" data-item="resultados-3"><span class="checkmark"></span><span class="item-text">No se interpretan ni se comparan con la teoría (eso va en Discusión)</span></label>
                     <label class="checklist-item"><input type="checkbox" data-item="resultados-4"><span class="checkmark"></span><span class="item-text">Incluye incertidumbres y porcentajes de error cuando corresponde</span></label>
                     <label class="checklist-item"><input type="checkbox" data-item="resultados-5"><span class="checkmark"></span><span class="item-text">Se redacta en tiempo pasado y de forma impersonal</span></label>
-                   <label class="checklist-item"><input type="checkbox" data-item="resultados-5"><span class="checkmark"></span><span class="item-text">No incluye ecuaciones teóricas pues estas ya aparecen en la introducción</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="resultados-5b"><span class="checkmark"></span><span class="item-text">No incluye ecuaciones teóricas pues estas ya aparecen en la introducción</span></label>
                     <!-- Tablas -->
                     <label class="checklist-item"><input type="checkbox" data-item="resultados-6"><span class="checkmark"></span><span class="item-text">Tablas: creadas directamente en el documento (no como imágenes)</span></label>
                     <label class="checklist-item"><input type="checkbox" data-item="resultados-7"><span class="checkmark"></span><span class="item-text">Tablas: número y título descriptivo arriba de la tabla</span></label>
@@ -361,39 +429,37 @@
                     <label class="checklist-item"><input type="checkbox" data-item="presentacion-3"><span class="checkmark"></span><span class="item-text">Redacción impersonal o en tercera persona en todo el documento</span></label>
                 </div>
             </section>
+        </main>
 
-        
+        <!-- Botones de acción -->
+        <div class="action-buttons">
+            <button id="clearAll" class="btn btn-secondary" title="Desmarcar todas las casillas">
+                <i class="fas fa-eraser" aria-hidden="true"></i>
+                Limpiar Todo
+            </button>
+            <button id="exportProgress" class="btn btn-primary" title="Descargar avance en PDF">
+                <i class="fas fa-download" aria-hidden="true"></i>
+                Exportar Progreso
+            </button>
+        </div>
+    </div>
 
-      <!-- Botones de acción -->
-<div class="action-buttons">
-  <button id="clearAll" class="btn btn-secondary" title="Desmarcar todas las casillas">
-    <i class="fas fa-eraser" aria-hidden="true"></i>
-    Limpiar Todo
-  </button>
-  <button id="exportProgress" class="btn btn-primary" title="Descargar avance en PDF">
-    <i class="fas fa-download" aria-hidden="true"></i>
-    Exportar Progreso
-  </button>
-</div>
-</div>
+    <!-- Cargar jsPDF antes del script principal -->
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
 
-<!-- Cargar jsPDF antes del script principal -->
-<script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <!-- Tu script -->
+    <script src="script.js" defer></script>
 
-<!-- Tu script -->
-<script src="script.js" defer></script>
-
-<!-- Licencia -->
-<footer style="font-size: 13px; text-align: center; margin-top: 20px; color: #444;">
-  <a href="https://evarelena.github.io/Informes-de-Laboratorio-Fisica-General-TEC/">Lista de Chequeo para Informes de Laboratorio de la Escuela de Física del TEC</a> © 2025 
-  by <a href="https://creativecommons.org" target="_blank">Évar Elena Sevilla Quesada</a> 
-  is licensed under 
-  <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a>
-  <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="CC" style="max-width:1em;max-height:1em;margin-left:.2em;">
-  <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="BY" style="max-width:1em;max-height:1em;margin-left:.2em;">
-  <img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="NC" style="max-width:1em;max-height:1em;margin-left:.2em;">
-  <img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="SA" style="max-width:1em;max-height:1em;margin-left:.2em;">
-</footer>
-
+    <!-- Licencia -->
+    <footer style="font-size: 13px; text-align: center; margin-top: 20px; color: #444;">
+        <a href="https://evarelena.github.io/Informes-de-Laboratorio-Fisica-General-TEC/">Lista de Chequeo para Informes de Laboratorio de la Escuela de Física del TEC</a> © 2026
+        by <a href="https://creativecommons.org" target="_blank">Évar Elena Sevilla Quesada</a>
+        is licensed under
+        <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a>
+        <img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="CC" style="max-width:1em;max-height:1em;margin-left:.2em;">
+        <img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="BY" style="max-width:1em;max-height:1em;margin-left:.2em;">
+        <img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="NC" style="max-width:1em;max-height:1em;margin-left:.2em;">
+        <img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="SA" style="max-width:1em;max-height:1em;margin-left:.2em;">
+    </footer>
 </body>
 </html>
