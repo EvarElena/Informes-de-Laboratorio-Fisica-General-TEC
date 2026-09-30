@@ -45,6 +45,27 @@
         <main class="checklist-container">
             <h2>Lista de Chequeo por Secciones</h2>
 
+                <!-- Resumen general -->
+            <section class="overall-progress">
+                <h3>Progreso General</h3>
+                <div class="overall-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalCompleted">0</span>
+                        <span class="stat-label">Elementos completados</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="totalItems">74</span>
+                        <span class="stat-label">Total de elementos</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="completionPercentage">0%</span>
+                        <span class="stat-label">Porcentaje completado</span>
+                    </div>
+                </div>
+                <div class="overall-progress-bar"><div class="overall-progress-fill" id="overallProgressFill" style="width: 0%"></div></div>
+            </section>
+        </main>
+
             <!-- 1. Título (4) -->
             <section class="checklist-section" data-section="titulo">
                 <div class="section-header">
@@ -341,26 +362,7 @@
                 </div>
             </section>
 
-            <!-- Resumen general -->
-            <section class="overall-progress">
-                <h3>Progreso General</h3>
-                <div class="overall-stats">
-                    <div class="stat-item">
-                        <span class="stat-number" id="totalCompleted">0</span>
-                        <span class="stat-label">Elementos completados</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" id="totalItems">74</span>
-                        <span class="stat-label">Total de elementos</span>
-                    </div>
-                    <div class="stat-item">
-                        <span class="stat-number" id="completionPercentage">0%</span>
-                        <span class="stat-label">Porcentaje completado</span>
-                    </div>
-                </div>
-                <div class="overall-progress-bar"><div class="overall-progress-fill" id="overallProgressFill" style="width: 0%"></div></div>
-            </section>
-        </main>
+        
 
       <!-- Botones de acción -->
 <div class="action-buttons">
