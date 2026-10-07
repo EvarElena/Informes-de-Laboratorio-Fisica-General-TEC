@@ -206,6 +206,7 @@
         .gp-demo-table th, .gp-demo-table td { padding: 0.2rem 1.1rem; text-align: center; }
         .gp-demo-table thead th { border-top: 1.5px solid #333; border-bottom: 1px solid #333; font-weight: 600; }
         .gp-demo-table tbody tr:last-child td { border-bottom: 1.5px solid #333; }
+        .gp-demo-table.gp-compact th, .gp-demo-table.gp-compact td { padding: 0.2rem 0.55rem; white-space: nowrap; }
 
         .gp-figure { margin: 0.2rem 0 0; }
         .gp-figure { text-align: center; }
@@ -319,7 +320,7 @@
                     <div class="overall-progress-fill" id="overallProgressFill" style="width: 0%"></div>
                 </div>
                 <span class="op-count">
-                    <span id="totalCompleted">0</span>/<span id="totalItems">74</span>
+                    <span id="totalCompleted">0</span>/<span id="totalItems">75</span>
                 </span>
                 <span class="op-percent" id="completionPercentage">0%</span>
             </section>
@@ -438,12 +439,12 @@
                 </div>
             </section>
 
-            <!-- 7. Resultados (14) -->
+            <!-- 7. Resultados (15) -->
             <section class="checklist-section" data-section="resultados">
                 <div class="section-header">
                     <h3><i class="fas fa-chart-line"></i> 7. Resultados</h3>
                     <div class="section-progress">
-                        <span class="progress-text">0/14</span>
+                        <span class="progress-text">0/15</span>
                         <div class="progress-bar"><div class="progress-fill" style="width: 0%"></div></div>
                     </div>
                 </div>
@@ -453,7 +454,7 @@
                     <label class="checklist-item"><input type="checkbox" data-item="resultados-3"><span class="checkmark"></span><span class="item-text">No se interpretan ni se comparan con la teoría (eso va en Discusión)</span></label>
                     <label class="checklist-item"><input type="checkbox" data-item="resultados-4"><span class="checkmark"></span><span class="item-text">Incluye incertidumbres y porcentajes de error cuando corresponde</span></label>
                     <label class="checklist-item"><input type="checkbox" data-item="resultados-5"><span class="checkmark"></span><span class="item-text">Las mediciones en tablas se reportan como valor ± incertidumbre en la misma celda, no con la incertidumbre en una columna separada</span></label>
-                    <label class="checklist-item"><input type="checkbox" data-item="resultados-5"><span class="checkmark"></span><span class="item-text">Se redacta en tiempo pasado y de forma impersonal</span></label>
+                    <label class="checklist-item"><input type="checkbox" data-item="resultados-5c"><span class="checkmark"></span><span class="item-text">Se redacta en tiempo pasado y de forma impersonal</span></label>
                     <label class="checklist-item"><input type="checkbox" data-item="resultados-5b"><span class="checkmark"></span><span class="item-text">No incluye ecuaciones teóricas pues estas ya aparecen en la introducción</span></label>
                     <!-- Tablas -->
                     <label class="checklist-item"><input type="checkbox" data-item="resultados-6"><span class="checkmark"></span><span class="item-text">Tablas: creadas directamente en el documento (no como imágenes)</span></label>
@@ -979,6 +980,7 @@
                 <li>Cada encabezado dice qué variable es y su unidad entre paréntesis.</li>
                 <li>Los encabezados se distinguen del resto (por ejemplo, con una línea o en negrita).</li>
                 <li>Usa la cantidad correcta de cifras significativas.</li>
+                <li>Cada medición va con su incertidumbre <strong>en la misma celda</strong>, como valor ± incertidumbre. No pongas la incertidumbre en una columna aparte.</li>
             </ul>
             <div class="gp-example gp-good">
                 <span class="gp-example-label">Ejemplo</span>
@@ -999,6 +1001,31 @@
                 <div class="gp-example gp-bad"><span class="gp-example-label">Evita este título</span>Tabla 1. Datos</div>
                 <div class="gp-example gp-good"><span class="gp-example-label">Mejor</span>Tabla 1. Velocidad de una esfera en caída libre medida en distintos instantes.</div>
             </div>
+
+            <h4>Incertidumbre en las tablas</h4>
+            <div class="gp-example gp-bad">
+                <span class="gp-example-label">Evita: incertidumbre en columnas aparte</span>
+                <table class="gp-demo-table gp-compact">
+                    <thead><tr><th><em>t</em> (s)</th><th>Δ<em>t</em> (s)</th><th><em>v</em> (m/s)</th><th>Δ<em>v</em> (m/s)</th></tr></thead>
+                    <tbody>
+                        <tr><td>1.01</td><td>0.01</td><td>−6.90</td><td>0.05</td></tr>
+                        <tr><td>1.99</td><td>0.01</td><td>−17.00</td><td>0.05</td></tr>
+                        <tr><td>2.98</td><td>0.01</td><td>−26.35</td><td>0.05</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="gp-example gp-good">
+                <span class="gp-example-label">Mejor: cada valor con su incertidumbre</span>
+                <table class="gp-demo-table gp-compact">
+                    <thead><tr><th><em>t</em> (s)</th><th><em>v</em> (m/s)</th></tr></thead>
+                    <tbody>
+                        <tr><td>1.01 ± 0.01</td><td>−6.90 ± 0.05</td></tr>
+                        <tr><td>1.99 ± 0.01</td><td>−17.00 ± 0.05</td></tr>
+                        <tr><td>2.98 ± 0.01</td><td>−26.35 ± 0.05</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p>El valor y su incertidumbre deben tener la misma cantidad de decimales: se escribe 1.01 ± 0.01 s, no 1.0 ± 0.01 s.</p>
         </div>
     </template>
 
@@ -1158,7 +1185,6 @@
     })();
     </script>
 
-   <!-- Licencia -->
 <!-- Licencia -->
 <footer style="font-size: 13px; text-align: center; margin-top: 20px; color: #444; line-height: 1.6;">
     <p style="margin: 0;">
